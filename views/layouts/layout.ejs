@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="stylesheets/style.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css"
+        integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.js"
+        integrity="sha256-HwWONEZrpuoh951cQD1ov2HUK5zA5DwJ1DNUXaM6FsY=" crossorigin="anonymous"></script>
+    <script src="javascripts/main.js"></script>
+<!-- 
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" type="text/css" href="stylesheets/zabuto_calendar.min.css">
+</head>
+
+<body>
+    <div class="page-wrapper chiller-theme toggled">
+        <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
+            <i class="fas fa-bars"></i>
+        </a>
+        <nav id="sidebar" class="sidebar-wrapper">
+            <div class="sidebar-content">
+                <div class="sidebar-brand">
+                    <a class="h5" href="#">THÔNG BÁO</a>
+                    <div id="close-sidebar">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                </div>
+                <div class="sidebar-header">
+                    <div class="user-pic">
+                        <img class="img-responsive img-rounded"
+                            src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg"
+                            alt="User picture">
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name">Jhon
+                            <strong>Smith</strong>
+                        </span>
+                        <span class="user-role">Administrator</span>
+                        <span class="user-status">
+                            <i class="fa fa-circle"></i>
+                            <span>Online</span>
+                        </span>
+                    </div>
+                </div>
+                <!-- sidebar-header  -->
+                <div class="sidebar-search">
+                    <div>
+                        <div class="input-group">
+                            <input type="text" class="form-control search-menu" placeholder="Search...">
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="fa fa-search" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- sidebar-search  -->
+                <div class="sidebar-menu">
+                    <ul>
+                        <li class="header-menu">
+                            <span>General</span>
+                        </li>
+                        <li class="sidebar-dropdown">
+                            <a href="#">
+                                <i class="fa fa-tachometer-alt"></i>
+                                <span>Dashboard</span>
+                                <span class="badge badge-pill badge-warning">New</span>
+                            </a>
+                            <div class="sidebar-submenu">
+                                <ul>
+                                    <li>
+                                        <a href="#">Dashboard 1
+                                            <span class="badge badge-pill badge-success">Pro</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Dashboard 2</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Dashboard 3</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="sidebar-dropdown">
+                            <a href="#">
+                                <i class="fa fa-shopping-cart"></i>
+                                <span>E-commerce</span>
+                                <span class="badge badge-pill badge-danger">3</span>
+                            </a>
+                            <div class="sidebar-submenu">
+                                <ul>
+                                    <li>
+                                        <a href="#">Products
+
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Orders</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Credit cart</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="sidebar-dropdown">
+                            <a href="#">
+                                <i class="far fa-gem"></i>
+                                <span>Components</span>
+                            </a>
+                            <div class="sidebar-submenu">
+                                <ul>
+                                    <li>
+                                        <a href="#">General</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Panels</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Tables</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Icons</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Forms</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="sidebar-dropdown">
+                            <a href="#">
+                                <i class="fa fa-chart-line"></i>
+                                <span>Charts</span>
+                            </a>
+                            <div class="sidebar-submenu">
+                                <ul>
+                                    <li>
+                                        <a href="#">Pie chart</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Line chart</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Bar chart</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Histogram</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="sidebar-dropdown">
+                            <a href="#">
+                                <i class="fa fa-globe"></i>
+                                <span>Maps</span>
+                            </a>
+                            <div class="sidebar-submenu">
+                                <ul>
+                                    <li>
+                                        <a href="#">Google maps</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Open street map</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="header-menu">
+                            <span>Extra</span>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-book"></i>
+                                <span>Documentation</span>
+                                <span class="badge badge-pill badge-primary">Beta</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-calendar"></i>
+                                <span>Calendar</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-folder"></i>
+                                <span>Examples</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- sidebar-menu  -->
+            </div>
+            <!-- sidebar-content  -->
+            <div class="sidebar-footer">
+                <a href="#">
+                    <i class="fa fa-bell"></i>
+                    <span class="badge badge-pill badge-warning notification">3</span>
+                </a>
+                <a href="#">
+                    <i class="fa fa-envelope"></i>
+                    <span class="badge badge-pill badge-success notification">7</span>
+                </a>
+                <a href="#">
+                    <i class="fa fa-cog"></i>
+                    <span class="badge-sonar"></span>
+                </a>
+                <a href="#">
+                    <i class="fa fa-power-off"></i>
+                </a>
+            </div>
+        </nav>
+        <!-- sidebar-wrapper  -->
+        <main class="page-content">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-5">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
+                    aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                    <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Phan Quoc Ky<span class="sr-only">(current)</span></a>
+                        </li>
+                        <!-- <li class="nav-item">
+                      <a class="nav-link" href="#">Link</a>
+                    </li> -->
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#">Trang chủ</a>
+                        </li>
+                    </ul>
+                    <!-- <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                  </form> -->
+                </div>
+            </nav>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12 col-md-8">
+                        <%- body %>
+                    </div>
+                    <!--List thông báo-->
+                    <div class="col-6 col-md-4 px-5">
+                        <ul class="list-group">
+                            <div class="list-group-item bg-danger text-center text-white">Thông báo mới</li>
+                        </ul>
+                            <div class="callout callout-info">
+                                <i>[Phòng đại học] 26/04/2021</i>
+                                <br>
+                                <h5>Thời gian đóng học phí</h5>
+                                Nhớ đóng học phí nha các em :)))) Không là cấm thi đoá
+                            </div>
+                            <div class="callout callout-info">
+                                <i>[Phòng đại học] 26/04/2021</i>
+                                <br>
+                                <h5>Thời gian đóng học phí</h5>
+                                Nhớ đóng học phí nha các em :)))) Không là cấm thi đoá
+                            </div>
+                            <div class="callout callout-info">
+                                <i>[Phòng đại học] 26/04/2021</i>
+                                <br>
+                                <h5>Thời gian đóng học phí</h5>
+                                Nhớ đóng học phí nha các em :)))) Không là cấm thi đoá
+                            </div>
+                            <div class="callout callout-info">
+                                <i>[Phòng đại học] 26/04/2021</i>
+                                <br>
+                                <h5>Thời gian đóng học phí</h5>
+                                Nhớ đóng học phí nha các em :)))) Không là cấm thi đoá
+                            </div>
+                        
+                        <div id="calendar"></div>
+                    </div>
+                </div>
+                <footer class="text-center">
+                    <div class="mb-2">
+                        <small>
+                            © 2021 made with <i class="fa fa-heart" style="color:red"></i> by - <a target="_blank"
+                                rel="noopener noreferrer" href="https://azouaoui.netlify.com">
+                                Ky Phan
+                            </a>
+                        </small>
+                    </div>
+                </footer>
+            </div>
+        </main>
+        <!-- page-content" -->
+    </div>
+
+    <!-- main script -->
+    <script>
+         $(document).ready(function () {
+            $("#calendar").zabuto_calendar({
+                language: "en",
+                today: true,
+            });
+        });
+    </script>
+
+    <!-- bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> -->
+    <script src="javascripts/zabuto_calendar.min.js"></script>
+</body>
+
+</html>
