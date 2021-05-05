@@ -6,18 +6,20 @@ const {validationResult} = require('express-validator')
 const CheckLogin = require('../auth/CheckLogin')
 
 
-
-
-Router.get('/', CheckLogin ,(req, res) => {
-    Annoucement.find().select('type title created_at modified_at author attachments')
-    .then(annoucement => {
-        res.json({
-            code: 0,
-            message: 'Đọc danh sách sản phẩm thành công',
-            data: annoucement
-        })
-    })
+Router.get('/',(req,res) => {
+    res.render('notification_list',{ layout: '../views/layouts/notification_layout' })
 })
+
+// Router.get('/', CheckLogin ,(req, res) => {
+//     Annoucement.find().select('type title created_at modified_at author attachments')
+//     .then(annoucement => {
+//         res.json({
+//             code: 0,
+//             message: 'Đọc danh sách sản phẩm thành công',
+//             data: annoucement
+//         })
+//     })
+// })
 
 Router.post('/',CheckLogin, (req, res) => {
     let result = validationResult(req)

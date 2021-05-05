@@ -8,6 +8,7 @@ const Account = require('../models/user.model')
 
 const registerValidator = require('./validators/registerValidator')
 const loginValidator = require('./validators/loginValidator')
+const CheckLogin = require('../auth/CheckLogin')
 
 
 Router.post('/login', loginValidator, (req, res) => {
@@ -108,6 +109,10 @@ Router.post('/register', registerValidator, (req, res) => {
         }
         return res.json({code: 1, message: message})
     }
+})
+
+Router.get('/create', (req, res) => {
+    res.render('create_account.ejs',{ layout: './layouts/layout' })
 })
 
 module.exports = Router

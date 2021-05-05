@@ -37,12 +37,10 @@ app.get('',(req,res) => {
     res.render('index')
 })
 
-app.get('/list',(req,res) => {
-    res.render('notification_list',{ layout: './layouts/notification_layout' })
-})
+
 
 app.get('/login',(req,res) => {
-    res.render('notification_list',{ layout: './layouts/layout_login' })
+    res.render('login',{ layout: './layouts/layout_login' })
 })
 
 

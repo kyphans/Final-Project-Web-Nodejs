@@ -3,43 +3,8 @@
 <%- include('../partials/head.ejs') %>
 <link href="stylesheets/login_style.css" rel="stylesheet" type="text/css">
     <body>
-        <div class="container-fluid">
-            <div class="container">
-                
-                <div class="wrapper fadeInDown">
-                    <div id="formContent">
-                      <!-- Tabs Titles -->
-                  
-                      <!-- Icon -->
-                      <div class="fadeIn first">
-                        <i class="fas fa-user" style="font-size: 60px; margin: 50px 10px 10px 10px; color: #56baed; "></i>
-                        <!-- <img src="https://www.flaticon.com/svg/vstatic/svg/1946/1946429.svg?token=exp=1620192564~hmac=4e6acc293ce89ad227c7b0d9c3d4e218" id="icon" alt="User Icon" style="width: 80px; padding: 10px;"/> -->
-                      </div>
-                  
-                       <!-- Login in with google -->
-                      <button type="button" class="login-with-google-btn" >
-                        Sign in with Google
-                      </button>
-
-                      <!-- Login Form -->
-                      <form action="/account/login" method="POST">
-                        <input type="text" id="email" class="fadeIn second" name="email" placeholder="Email">
-                        <input type="text" id="password" class="fadeIn third" name="password" placeholder="Password">
-                        <input type="submit" class="fadeIn fourth" value="Log In">
-                      </form>
-                  
-                      <!-- Remind Passowrd -->
-                      <div id="formFooter">
-                        <a class="underlineHover" href="#">Forgot Password?</a>
-                      </div>
-                  
-                    </div>
-                  </div>
-
-            </div>
-            <%- include('../partials/footer.ejs') %>
-        </div>
+      <%- body %>
+      <%- include('../partials/footer.ejs') %>
         <%- include('../partials/javascript.ejs') %>
     </body>
-
 </html>

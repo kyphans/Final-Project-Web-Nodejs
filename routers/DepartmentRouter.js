@@ -6,15 +6,16 @@ const Department = require('../models/department.model')
 
 
 
-Router.get('/', CheckLogin ,(req, res) => {
-    Department.find().select('name')
-    .then(department => {
-        res.json({
-            code: 0,
-            message: 'Đọc danh sách sản phẩm thành công',
-            data: department
-        })
-    })
+Router.get('/',(req, res) => {
+    // Department.find().select('name')
+    // .then(department => {
+    //     res.json({
+    //         code: 0,
+    //         message: 'Đọc danh sách sản phẩm thành công',
+    //         data: department
+    //     })
+    // })
+    res.render('department.ejs',{ layout: './layouts/layout' })
 })
 
 Router.post('/',CheckLogin, (req, res) => {
