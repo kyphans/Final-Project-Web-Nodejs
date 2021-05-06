@@ -97,7 +97,7 @@ Router.post("/oauth/google", async (req, res) => {
       if (!acc) {
         let user = new Account({
           name,
-          picture,
+          profile_picture: picture,
           email,
         });
         return user.save();
