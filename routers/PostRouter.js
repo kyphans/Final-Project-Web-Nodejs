@@ -6,7 +6,7 @@ const Post = require('../models/content/post/post.model')
 
 
 
-Router.get('/', CheckLogin ,(req, res) => {
+Router.get('/' ,(req, res) => {
     Post.find().select('type post_content_id like_count comment_count created_at modified_at author attachments')
     .then(post => {
         res.json({
@@ -17,14 +17,14 @@ Router.get('/', CheckLogin ,(req, res) => {
     })
 })
 
-Router.post('/',CheckLogin, (req, res) => {
+Router.post('/', (req, res) => {
     let result = validationResult(req)
     if (result.errors.length === 0) {
-        const {type, post_content_id,like_count, comment_count, created_at, modified_at, author, attachments} = req.body
+        let content ="None"
+        const {type, post_content_id,like_count, comment_count, created_at, modified_at, user_id, attachments} = req.body
         let post = new Post({
-            type, post_content_id, like_count, comment_count, created_at, modified_at, author, attachments
+            type, post_content_id, like_count, comment_count, created_at, modified_at, user_id, attachments,content
         })
-
         post.save()
         .then(() => {
             return res.json({code: 0, message: 'Thêm post thành công',
