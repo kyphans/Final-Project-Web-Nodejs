@@ -1,5 +1,6 @@
 const Annoucement = require('../models/content/annoucement/annoucement.model')
-
+const Department = require('../models/department.model')
+const Categories = require('../models/categories.model')
 const express = require('express')
 const Router = express.Router()
 const {validationResult} = require('express-validator')
@@ -7,7 +8,24 @@ const CheckLogin = require('../auth/CheckLogin')
 
 
 Router.get('/',(req,res) => {
-    res.render('notification_list',{ layout: '../views/layouts/notification_layout' })
+    // res.render('notification_list',{ layout: '../views/layouts/notification_layout' })
+    Annoucement.find()
+    .then(announ => {
+        // console.log(annou)
+        res.render('notification_list',{ layout: '../views/layouts/notification_layout', announ: announ})
+    })
+})
+
+Router.get('/create', (req, res) => {
+    Annoucement.find()
+    .then(announ => {
+        Categories.find()
+        .then(cate => {
+            res.render('create_annou.ejs',{ layout: './layouts/layout', announ: announ, cate: cate})
+        })
+    })
+    
+    
 })
 
 // Router.get('/', CheckLogin ,(req, res) => {
@@ -21,12 +39,14 @@ Router.get('/',(req,res) => {
 //     })
 // })
 
-Router.post('/',CheckLogin, (req, res) => {
+Router.post('/', (req, res) => {
     let result = validationResult(req)
     if (result.errors.length === 0) {
-        const {type, title, created_at, modified_at, author, attachments} = req.body
+        const {type, title, user_id, attachments, content, categories_id} = req.body
+        let created_at = new Date()
+        let modified_at = new Date()
         let annoucement = new Annoucement({
-            type, title, created_at, modified_at, author, attachments
+            type, title, created_at, modified_at, user_id, attachments, content, categories_id
         })
 
         annoucement.save()

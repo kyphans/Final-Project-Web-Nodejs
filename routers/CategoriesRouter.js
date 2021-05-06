@@ -4,21 +4,22 @@ const {validationResult} = require('express-validator')
 const CheckLogin = require('../auth/CheckLogin')
 const Categories = require('../models/categories.model')
 const axios = require('axios')
+const Annoucement = require('../models/content/annoucement/annoucement.model')
 
 
 
-Router.get('/', CheckLogin ,(req, res) => {
-    Categories.find().select('name')
-    .then(categories => {
-        res.json({
-            code: 0,
-            message: 'Đọc danh sách sản phẩm thành công',
-            data: categories
+Router.get('/',(req, res) => {
+    Annoucement.find()
+    .then(announ => {
+        Categories.find()
+        .then(category => {
+            // console.log(category)
+            res.render('categories.ejs',{ layout: './layouts/layout', data: category, announ:announ })
         })
     })
 })
 
-Router.post('/',CheckLogin, (req, res) => {
+Router.post('/', (req, res) => {
     let result = validationResult(req)
     if (result.errors.length === 0) {
         const {name} = req.body
@@ -96,7 +97,7 @@ Router.delete('/:id', CheckLogin, (req, res) => {
         })
 })
 
-Router.put('/:id', CheckLogin, (req, res) => {
+Router.put('/:id', (req, res) => {
     let {id} = req.params
     if(!id)
     {

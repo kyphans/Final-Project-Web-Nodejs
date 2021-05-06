@@ -4,16 +4,19 @@ const Router = express.Router()
 const {validationResult} = require('express-validator')
 const CheckLogin = require('../auth/CheckLogin')
 const Department = require('../models/department.model')
+const Annoucement = require('../models/content/annoucement/annoucement.model')
 
 
 
 Router.get('/',(req, res) => {
-    Department.find()
-    .then(department => {
-        // console.log(department)
-        res.render('department.ejs',{ layout: './layouts/layout', data: department })
+    Annoucement.find()
+    .then(announ => {
+        Department.find()
+        .then(department => {
+            // console.log(department)
+            res.render('department.ejs',{ layout: './layouts/layout', department: department, announ: announ})
+        })
     })
-    
 })
 
 Router.post('/', (req, res) => {
@@ -93,7 +96,7 @@ Router.delete('/:id', CheckLogin, (req, res) => {
         })
 })
 
-Router.put('/:id', CheckLogin, (req, res) => {
+Router.put('/:id', (req, res) => {
     let {id} = req.params
     if(!id)
     {

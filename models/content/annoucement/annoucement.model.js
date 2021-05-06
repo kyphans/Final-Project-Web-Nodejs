@@ -6,19 +6,15 @@ const annoucementSchema = new Schema({
   title: String,
   created_at: Date,
   modified_at: Date,
-  author: {
-    user_id: {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: "user",
-    },
-  },
+  user_id: String,
+  content: String,
   attachments: [
     {
       type: String,
       url: String,
     },
   ],
-  categories: Array,
+  categories_id: String,
 });
 
 module.exports = mongoose.model("Annoucement", annoucementSchema);

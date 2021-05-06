@@ -33,8 +33,15 @@ app.use('/department', DepartmentRouter)
 //static file
 app.use(express.static('public'))
 
+const Annoucement = require('./models/content/annoucement/annoucement.model')
 app.get('',(req,res) => {
-    res.render('index')
+    Annoucement.find()
+    .then(announ => {
+        // console.log(annou)
+        // res.render('notification_list',{ layout: '../views/layouts/notification_layout', announ: announ})
+        res.render('index', {announ: announ})
+    })
+   
 })
 
 

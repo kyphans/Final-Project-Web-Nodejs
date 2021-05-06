@@ -20,10 +20,11 @@
             <div class="col-sm-10">
                 <select class="form-control" id="form-faculty" name="faculty">
                     <option selected> --Vui lòng chọn-- </option>
-                    <option>Khoa 1</option>
-                    <option>Khoa 2</option>
-                    <option>Khoa 3</option>
-                    <option>Khoa 4</option>
+                    <% department.forEach((element, index) => { %> 
+                        <%- 
+                        `<option value="${element._id}">${element.name}</option>`
+                        %>
+                    <% });  %> 
                 </select>
             </div>
         </div>

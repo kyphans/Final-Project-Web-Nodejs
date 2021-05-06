@@ -5,6 +5,8 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
 const Account = require('../models/user.model')
+const Annoucement = require('../models/content/annoucement/annoucement.model')
+const Department = require('../models/department.model')
 
 const registerValidator = require('./validators/registerValidator')
 const loginValidator = require('./validators/loginValidator')
@@ -115,7 +117,17 @@ Router.post('/register', registerValidator, (req, res) => {
 })
 
 Router.get('/create', (req, res) => {
-    res.render('create_account.ejs',{ layout: './layouts/layout' })
+
+    Annoucement.find()
+    .then(annou => {
+        Department.find()
+        .then(department => {
+            console.log(department)
+            res.render('create_account.ejs',{ layout: './layouts/layout', data: annou, department: department})
+        })
+    })
+    
+    
 })
 
 module.exports = Router
