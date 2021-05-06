@@ -10,7 +10,7 @@ const Post = require('./routers/PostRouter')
 const AnnouncementRouter = require('./routers/AnnouncementRouter')
 const CategoriesRouter = require('./routers/CategoriesRouter')
 const CommentRouter = require('./routers/CommentRouter')
-const departmentRouter = require('./routers/DepartmentRouter')
+const DepartmentRouter = require('./routers/DepartmentRouter')
 require('dotenv').config()
 
 const PORT = process.env.PORT
@@ -28,7 +28,7 @@ app.use('/post', Post)
 app.use('/announ', AnnouncementRouter)
 app.use('/cate', CategoriesRouter)
 app.use('/comment', CommentRouter)
-app.use('/department', departmentRouter)
+app.use('/department', DepartmentRouter)
 
 //static file
 app.use(express.static('public'))

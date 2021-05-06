@@ -3,6 +3,7 @@ const Router = express.Router()
 const {validationResult} = require('express-validator')
 const CheckLogin = require('../auth/CheckLogin')
 const Categories = require('../models/categories.model')
+const axios = require('axios')
 
 
 

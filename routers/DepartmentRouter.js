@@ -1,4 +1,5 @@
 const express = require('express')
+const axios = require('axios')
 const Router = express.Router()
 const {validationResult} = require('express-validator')
 const CheckLogin = require('../auth/CheckLogin')
@@ -7,25 +8,21 @@ const Department = require('../models/department.model')
 
 
 Router.get('/',(req, res) => {
-    // Department.find().select('name')
-    // .then(department => {
-    //     res.json({
-    //         code: 0,
-    //         message: 'Đọc danh sách sản phẩm thành công',
-    //         data: department
-    //     })
-    // })
-    res.render('department.ejs',{ layout: './layouts/layout' })
+    Department.find()
+    .then(department => {
+        // console.log(department)
+        res.render('department.ejs',{ layout: './layouts/layout', data: department })
+    })
+    
 })
 
-Router.post('/',CheckLogin, (req, res) => {
+Router.post('/', (req, res) => {
     let result = validationResult(req)
     if (result.errors.length === 0) {
         const {name} = req.body
         let department = new Department({
             name
         })
-
         department.save()
         .then(() => {
             return res.json({code: 0, message: 'Thêm post thành công',
