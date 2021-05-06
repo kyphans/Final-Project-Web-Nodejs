@@ -6,7 +6,7 @@ const {validationResult} = require('express-validator')
 const CheckLogin = require('../auth/CheckLogin')
 
 
-Router.get('/',(req,res) => {
+Router.get('/',CheckLogin,(req,res) => {
     res.render('notification_list',{ layout: '../views/layouts/notification_layout' })
 })
 

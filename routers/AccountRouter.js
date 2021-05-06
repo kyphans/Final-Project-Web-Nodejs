@@ -37,6 +37,8 @@ Router.post('/login', loginValidator, (req, res) => {
                 expiresIn: '1h'
             }, (err, token) => {
                 if (err) throw err
+                // let headers = new Headers({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.token });
+                // this._http.post(URL,DATA, {headers: headers});
                 return res.json({
                     code: 0,
                     message:'Đăng nhập thành công',
@@ -45,6 +47,7 @@ Router.post('/login', loginValidator, (req, res) => {
                     faculty: account.faculty,
                     token: token
                 })
+                
             })
         })
         .catch(e => {
