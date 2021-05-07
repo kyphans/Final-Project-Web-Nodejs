@@ -31,7 +31,6 @@ Router.get('/', (req, res) => {
           }
         }, {
           '$project': {
-            'department._id': 0, 
             'department.createdAt': 0, 
             'department.updatedAt': 0, 
             'department.__v': 0
@@ -156,4 +155,53 @@ Router.post('/register', registerValidator, (req, res) => {
     }
 })
 
+
+Router.put('/:id', (req, res) => {
+    let {id} = req.params
+    if(!id)
+    {
+        return res.json({code: 1, message: 'Khong co thong tin '})
+    }
+
+    let supportedFields = ['name','role','email','username','_departmentId']
+
+    let updateData = req.body
+
+    if(!updateData)
+    {
+        return res.json({code: 2, message: 'Khong co du lieu can cap nhat'})
+    }
+
+
+
+    for(field in updateData)
+    {
+        if(!supportedFields.includes(field))
+        {
+            delete updateData[field]
+        }
+    }
+
+    // return res.json({code: 0, message: 'Test thu'})
+    
+    Account.findByIdAndUpdate(id, updateData, {
+        new: true
+    })
+    .then(p =>
+        {
+            if(p)
+            {
+                return res.json({code: 0, message: 'Da cap nhat thanh cong', data: updateData})
+            }else
+                return res.json({code: 2, message: 'Cap nhat khong thanh cong'})
+        })
+    .catch(e =>
+        {
+            if(e.message.includes('Cast to ObjectId failed'))
+            {
+                return ress.json({code: 3, message: 'Day khong phai la mot id hop le'})
+            }
+                return ress.json({code: 3, message: e.message})
+        })
+})
 module.exports = Router

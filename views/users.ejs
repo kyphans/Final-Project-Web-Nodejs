@@ -40,7 +40,7 @@
 				<tbody>
 					<% users.forEach((element, index) => { %> 
 						<%- 
-							`<tr>
+							`<tr id="${index+1}">
 								<td>
 									<span class="custom-checkbox">
 										<input type="checkbox" id="checkbox1" name="options[]" value="1">
@@ -52,7 +52,8 @@
 								<td class="role ${element.role}">${element.role}</td>
 								<td class="username" hidden>${element.username}</td>
 								<td class="name ${element.name}">${element.name}</td>
-                                <td class="department">${element.department.name}</td>
+                                <td class="department_id" hidden>${element.department._id}</td>
+								<td class="department">${element.department.name}</td>
                                 <td class="email">${element.email}</td>
 								<td>
 									<a href="#editUserModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
@@ -92,7 +93,6 @@
                     <input type="name" class="form-control" id="Name" name="name">
                     <label class="mt-3">Khoa/Phòng ban</label>
                     <select class="form-control" id="department_id" name="department_id">
-                        <option></option>
                         <% department.forEach((element, index) => { %> 
                             <%- 
                             `<option value="${element._id}">${element.name}</option>`
@@ -103,7 +103,6 @@
                     <input type="username" class="form-control" id="username" name="username">
                     <label class="mt-3">Role</label>
                     <select class="form-control" id="role" name="role">
-                        <option></option>
                         <option>Admin</option>
                         <option>Viên chức</option>
                     </select>
@@ -130,11 +129,12 @@
 				</div>
 				<div class="modal-body">
 					<div class="form-group">
+						<div id="tr_id" hidden></div>
+						<div id="_id" hidden></div>
 						<label class="mt-2">Họ và tên</label>
-						<input type="name" class="form-control" id="Name" name="name">
+						<input type="name" class="form-control" id="edit-name" name="name">
 						<label class="mt-3">Khoa/Phòng ban</label>
-						<select class="form-control" id="department_id" name="department_id">
-							<option></option>
+						<select class="form-control" id="edit-department_id" name="department_id">
 							<% department.forEach((element, index) => { %> 
 								<%- 
 								`<option value="${element._id}">${element.name}</option>`
@@ -142,17 +142,16 @@
 							<% });  %> 
 						</select>
 						<label class="mt-3">Username</label>
-						<input type="username" class="form-control" id="username" name="username">
+						<input type="username" class="form-control" id="edit-username" name="username">
 						<label class="mt-3">Role</label>
-						<select class="form-control" id="role" name="role">
-							<option></option>
+						<select class="form-control" id="edit-role" name="role">
 							<option>Admin</option>
 							<option>Viên chức</option>
 						</select>
 						<label class="mt-3">Email</label>
-						<input type="email" class="form-control" id="Email" name="email">
-						<label class="mt-3">Password</label>
-						<input type="password" class="form-control" id="Password" name="password">
+						<input type="email" class="form-control" id="edit-email" name="email">
+						<!-- <label class="mt-3">Password</label>
+						<input type="password" class="form-control" id="edit-password" name="password"> -->
 					</div>
 				</div>
 				<div class="modal-footer">
@@ -187,20 +186,25 @@
 <script src="/javascripts/table_script.js"></script>
 
 <script>
-
 	$("a.edit").click(function(){
 			let get_id = $(this).closest("tr").find("td.id").text();
 			let get_name = $(this).closest("tr").find("td.name").text();
 			let get_deparment = $(this).closest("tr").find("td.department").text();
+			let get_deparment_id = $(this).closest("tr").find("td.department_id").text();
 			let get_username = $(this).closest("tr").find("td.username").text();
 			let get_role = $(this).closest("tr").find("td.role").text();
 			let get_email = $(this).closest("tr").find("td.email").text();
+			let tr_id =$(this).closest("tr").parent().find("tr").attr("id");
 
-			console.log(get_id,get_name,get_deparment,get_username,get_role,get_email)
+			// console.log(get_id,get_name,get_deparment,get_deparment_id,get_username,get_role,get_email)
+			console.log(tr_id)
 
-			$("#Name").val(get_name);
-			$("#Email").val(get_email);
-			// $("div.input-id").text(get_id);
+			$("#tr_id").text(tr_id)
+			$("#_id").text(get_id)
+			$("#edit-name").val(get_name)
+			$("#edit-username").val(get_username)
+			$("#edit-email").val(get_email)
+			$("#edit-name").val(get_name)
     });
 
 	function add() {	
@@ -242,21 +246,53 @@
 		});
 	}
 
-    function edit() {	
-        let get_name = $("input.input-edit").val()
-		let get_id = $("div.input-id").text()
+    function edit() {
+        let get_tr_id = $("#tr_id").text()
+        let get_id = $("#_id").text()
+		let get_name = $("#edit-name").val()
+		let get_deparment = $("#edit-department_id option").filter(':selected').text()
+		let get_deparment_id = $("#edit-department_id option").filter(':selected').val()
+		let get_username = 	$("#edit-username").val()
+		let get_role = "Admin da sua";
+		let get_email = $("#edit-email").val()
         let url = "/account/"+get_id
+
+		// console.log(url)
+
 		$.ajax({
 			type: "PUT",
 			url: url,
 			data: {
-                "name":$("input.input-edit").val(),
-				"id":$("div.input-id").text()
+				"name":get_name,
+                "_departmentId":get_deparment_id,
+                "username":get_username,
+                "role":get_role,
+                "email":get_email
 			},
 			success: (data)=>{
 				let json = data.data
-				$("td."+get_id).closest("tr").find("td.name").text(get_name)
-				
+				console.log(data)
+				$("#"+get_tr_id).remove()
+				$("tbody").append(
+					`<tr>
+						<td>
+							<span class="custom-checkbox">
+								<input type="checkbox" id="checkbox1" name="options[]" value="1">
+								<label for="checkbox1"></label>
+							</span>
+						</td>
+						<td>Update</td>
+						<td>${get_role}</td>
+						<td>${get_name}</td>
+						<td>${get_deparment}</td>
+						<td>${get_email}</td>
+						<td>
+							<a href="#editUserModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+							<a href="#deleteUserModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+						</td>
+					</tr>` 
+				)
+				$("#addUserModal").modal('toggle')
 			}
 		});
 	}
