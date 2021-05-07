@@ -48,10 +48,12 @@
 									</span>
 								</td>
 								<td>${index+1}</td>
-								<td class="id ${element.role}">${element.role}</td>
+								<td class="id" hidden>${element._id}</td>
+								<td class="role ${element.role}">${element.role}</td>
+								<td class="username" hidden>${element.username}</td>
 								<td class="name ${element.name}">${element.name}</td>
-                                <td>${element.department.name}</td>
-                                <td>${element.email}</td>
+                                <td class="department">${element.department.name}</td>
+                                <td class="email">${element.email}</td>
 								<td>
 									<a href="#editUserModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
 									<a href="#deleteUserModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
@@ -90,7 +92,7 @@
                     <input type="name" class="form-control" id="Name" name="name">
                     <label class="mt-3">Khoa/Phòng ban</label>
                     <select class="form-control" id="department_id" name="department_id">
-                        <option selected> --Vui lòng chọn-- </option>
+                        <option></option>
                         <% department.forEach((element, index) => { %> 
                             <%- 
                             `<option value="${element._id}">${element.name}</option>`
@@ -101,20 +103,15 @@
                     <input type="username" class="form-control" id="username" name="username">
                     <label class="mt-3">Role</label>
                     <select class="form-control" id="role" name="role">
-                        <option selected> --Vui lòng chọn-- </option>
+                        <option></option>
                         <option>Admin</option>
                         <option>Viên chức</option>
                     </select>
                     <label class="mt-3">Email</label>
-                    <input type="email" class="form-control" id="Email" name="email">
+                    <input type="email" class="form-control" name="email" id="add-email">
                     <label class="mt-3">Password</label>
-                    <input type="password" class="form-control" id="Password" name="password">
+                    <input type="password" class="form-control" name="password" id="add-password">
                 </div>
-				<!-- <div class="form-group">
-					<label>Name</label>
-					<input id="add_User" type="text" class="form-control" name="add_department" required>
-				</div>	 -->
-                
 			</div>
 			<div class="modal-footer">
 				<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
@@ -128,13 +125,34 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 				<div class="modal-header">						
-					<h4 class="modal-title">Edit Department</h4>
+					<h4 class="modal-title">Edit User</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				</div>
-				<div class="modal-body">					
+				<div class="modal-body">
 					<div class="form-group">
-						<div class="input-id" hidden></div>
-                    	<input type="text" class="form-control input-edit" required>
+						<label class="mt-2">Họ và tên</label>
+						<input type="name" class="form-control" id="Name" name="name">
+						<label class="mt-3">Khoa/Phòng ban</label>
+						<select class="form-control" id="department_id" name="department_id">
+							<option></option>
+							<% department.forEach((element, index) => { %> 
+								<%- 
+								`<option value="${element._id}">${element.name}</option>`
+								%>
+							<% });  %> 
+						</select>
+						<label class="mt-3">Username</label>
+						<input type="username" class="form-control" id="username" name="username">
+						<label class="mt-3">Role</label>
+						<select class="form-control" id="role" name="role">
+							<option></option>
+							<option>Admin</option>
+							<option>Viên chức</option>
+						</select>
+						<label class="mt-3">Email</label>
+						<input type="email" class="form-control" id="Email" name="email">
+						<label class="mt-3">Password</label>
+						<input type="password" class="form-control" id="Password" name="password">
 					</div>
 				</div>
 				<div class="modal-footer">
@@ -169,6 +187,22 @@
 <script src="/javascripts/table_script.js"></script>
 
 <script>
+
+	$("a.edit").click(function(){
+			let get_id = $(this).closest("tr").find("td.id").text();
+			let get_name = $(this).closest("tr").find("td.name").text();
+			let get_deparment = $(this).closest("tr").find("td.department").text();
+			let get_username = $(this).closest("tr").find("td.username").text();
+			let get_role = $(this).closest("tr").find("td.role").text();
+			let get_email = $(this).closest("tr").find("td.email").text();
+
+			console.log(get_id,get_name,get_deparment,get_username,get_role,get_email)
+
+			$("#Name").val(get_name);
+			$("#Email").val(get_email);
+			// $("div.input-id").text(get_id);
+    });
+
 	function add() {	
 		$.ajax({
 			type: "POST",
@@ -178,41 +212,35 @@
                 "department_id":$("#department_id option").filter(':selected').val(),
                 "username":$("#username").val(),
                 "role":$("#role").val(),
-                "email":$("#Email").val(),
-                "password":$("#Password").val()
+                "email":$("#add-email").val(),
+                "password":$("#add-password").val()
 			},
 			success: (data)=>{
 				let json = data.data
 				console.log(data)
-				// $("tbody").append(
-					
-				// 	`<tr>
-				// 		<td>
-				// 			<span class="custom-checkbox">
-				// 				<input type="checkbox" id="checkbox1" name="options[]" value="1">
-				// 				<label for="checkbox1"></label>
-				// 			</span>
-				// 		</td>
-				// 		<td>New</td>
-				// 		<td>${json._id}</td>
-				// 		<td>${json.name}</td>
-				// 		<td>
-				// 			<a href="#editDepartmentModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-				// 			<a href="#deleteDepartmentModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-				// 		</td>
-				// 	</tr>` 
-				// )
+				$("tbody").append(
+					`<tr>
+						<td>
+							<span class="custom-checkbox">
+								<input type="checkbox" id="checkbox1" name="options[]" value="1">
+								<label for="checkbox1"></label>
+							</span>
+						</td>
+						<td>New</td>
+						<td class="id ${json.role}">${json.role}</td>
+						<td class="name ${json.name}">${json.name}</td>
+						<td>${$("#department_id option").filter(':selected').text()}</td>
+						<td>${json.email}</td>
+						<td>
+							<a href="#editUserModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+							<a href="#deleteUserModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+						</td>
+					</tr>` 
+				)
 				$("#addUserModal").modal('toggle')
 			}
 		});
 	}
-
-	$("a.edit").click(function(){
-        let get_id = $(this).closest("tr").find("td.id").text();
-        let get_name = $(this).closest("tr").find("td.name").text();
-        $("input.input-edit").val(get_name);
-        $("div.input-id").text(get_id);
-    });
 
     function edit() {	
         let get_name = $("input.input-edit").val()

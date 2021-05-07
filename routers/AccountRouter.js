@@ -120,7 +120,6 @@ Router.post('/register', registerValidator, (req, res) => {
         })
         .then(() => bcrypt.hash(password, 10))
         .then(hashed => {
-
             let user = new Account({
                 type : type,
                 role : role,
@@ -133,12 +132,13 @@ Router.post('/register', registerValidator, (req, res) => {
                 class_name: class_name,
                 categories: categories
             })
-            return user.save();
+            user.save();
+            return res.json({code: 0, message: 'Đăng ký tài khoản thành công', data: user})
         })
-        .then(() => {
-            // không cần trả về chi tiết tài khoản nữa
-            return res.json({code: 0, message: 'Đăng ký tài khoản thành công'})
-        })
+        // .then(() => {
+        //     // không cần trả về chi tiết tài khoản nữa
+        //     return res.json({code: 0, message: 'Đăng ký tài khoản thành công', data: user})
+        // })
         .catch(e => {
             return res.json({code: 2, message: 'Đăng ký tài khoản thất bại: ' + 
                                 e.message})
@@ -154,20 +154,6 @@ Router.post('/register', registerValidator, (req, res) => {
         }
         return res.json({code: 1, message: message})
     }
-})
-
-Router.get('/create', (req, res) => {
-
-    Annoucement.find()
-    .then(announ => {
-        Department.find()
-        .then(department => {
-            // console.log(department)
-            res.render('create_account.ejs',{ layout: './layouts/layout', announ: announ, department: department})
-        })
-    })
-    
-    
 })
 
 module.exports = Router
