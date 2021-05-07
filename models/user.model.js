@@ -5,9 +5,9 @@ const userSchema = new Schema(
   {
     type: String,
     role: String,
-    department_id: {
+    _departmentId: {
       type: mongoose.SchemaTypes.ObjectId,
-      ref: "department",
+      ref: "departments",
     },
     username: String,
     email: {

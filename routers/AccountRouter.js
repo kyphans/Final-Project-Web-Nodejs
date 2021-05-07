@@ -3,15 +3,55 @@ const Router = express.Router()
 const {validationResult} = require('express-validator')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-
 const Account = require('../models/user.model')
 const Annoucement = require('../models/content/annoucement/annoucement.model')
 const Department = require('../models/department.model')
-
 const registerValidator = require('./validators/registerValidator')
 const loginValidator = require('./validators/loginValidator')
 const CheckLogin = require('../auth/CheckLogin')
 
+
+Router.get('/', (req, res) => {
+    let agg = [
+        {
+            '$sort': {
+              'role': 1
+            }
+        },
+        {
+          '$lookup': {
+            'from': 'departments', 
+            'localField': '_departmentId', 
+            'foreignField': '_id', 
+            'as': 'department'
+          }
+        }, {
+          '$unwind': {
+            'path': '$department'
+          }
+        }, {
+          '$project': {
+            'department._id': 0, 
+            'department.createdAt': 0, 
+            'department.updatedAt': 0, 
+            'department.__v': 0
+          }
+        }
+      ]
+    Account.aggregate(agg)
+    .then(users => {
+        Annoucement.find()
+        .then(announ => {
+            Department.find()
+            .then(department => {
+                // console.log(department)
+                res.render('users.ejs',{ layout: './layouts/layout', announ: announ, department: department, users:users})
+            })
+        })
+    })
+    
+    
+})
 
 Router.post('/login', loginValidator, (req, res) => {
     let result = validationResult(req)
@@ -45,7 +85,7 @@ Router.post('/login', loginValidator, (req, res) => {
                     message:'Đăng nhập thành công',
                     email : account.email,
                     name: account.name,
-                    faculty: account.faculty,
+                    department_id: account.department_id,
                     token: token
                 })
                 // return req.setHeader('Authorization',"Bearer " + token).json({ message: token })
@@ -71,7 +111,7 @@ Router.post('/register', registerValidator, (req, res) => {
     let result = validationResult(req)
     if (result.errors.length === 0) {
 
-        let {type, role, department_id, username, password,email, name, faculty, class_name, profile_picture, categories} = req.body
+        let {type, role, department_id, username, password,email, name, faculty_id, class_name, profile_picture, categories} = req.body
         Account.findOne({email: email})
         .then(acc => {
             if (acc) {
@@ -84,12 +124,12 @@ Router.post('/register', registerValidator, (req, res) => {
             let user = new Account({
                 type : type,
                 role : role,
-                department_id : department_id,
+                _departmentId : department_id,
                 email: email,
                 username: username,
                 password: hashed,
                 name: name,
-                faculty: faculty,
+                faculty_id: faculty_id,
                 class_name: class_name,
                 categories: categories
             })
@@ -119,11 +159,11 @@ Router.post('/register', registerValidator, (req, res) => {
 Router.get('/create', (req, res) => {
 
     Annoucement.find()
-    .then(annou => {
+    .then(announ => {
         Department.find()
         .then(department => {
-            console.log(department)
-            res.render('create_account.ejs',{ layout: './layouts/layout', data: annou, department: department})
+            // console.log(department)
+            res.render('create_account.ejs',{ layout: './layouts/layout', announ: announ, department: department})
         })
     })
     

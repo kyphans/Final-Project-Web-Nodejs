@@ -1,5 +1,5 @@
 const express = require('express')
-const axios = require('axios')
+// const axios = require('axios')
 const Router = express.Router()
 const {validationResult} = require('express-validator')
 const CheckLogin = require('../auth/CheckLogin')

@@ -6,7 +6,7 @@
     <% announ.forEach((element, index) => { %> 
         <%- 
         `<div class="callout callout-info">
-            <i>${element.created_at}</i>
+            <i>${element.created_at.toLocaleString()}</i>
             <br>
             <h5>${element.title}</h5>
             ${element.content}

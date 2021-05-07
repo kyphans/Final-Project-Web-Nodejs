@@ -45,6 +45,7 @@ Router.post('/', (req, res) => {
         const {type, title, user_id, attachments, content, categories_id} = req.body
         let created_at = new Date()
         let modified_at = new Date()
+        console.log(created_at)
         let annoucement = new Annoucement({
             type, title, created_at, modified_at, user_id, attachments, content, categories_id
         })
