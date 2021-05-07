@@ -199,9 +199,9 @@ Router.put('/:id', (req, res) => {
         {
             if(e.message.includes('Cast to ObjectId failed'))
             {
-                return ress.json({code: 3, message: 'Day khong phai la mot id hop le'})
+                return res.json({code: 3, message: 'Day khong phai la mot id hop le'})
             }
-                return ress.json({code: 3, message: e.message})
+                return res.json({code: 3, message: e.message})
         })
 })
 module.exports = Router
