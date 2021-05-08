@@ -11,7 +11,7 @@ const loginValidator = require('./validators/loginValidator')
 const CheckLogin = require('../auth/CheckLogin')
 
 
-Router.get('/', (req, res) => {
+Router.get('/',CheckLogin, (req, res) => {
     let agg = [
         {
             '$sort': {
@@ -44,7 +44,7 @@ Router.get('/', (req, res) => {
             Department.find()
             .then(department => {
                 // console.log(department)
-                res.render('users.ejs',{ layout: './layouts/layout', announ: announ, department: department, users:users})
+                res.render('users.ejs',{ layout: './layouts/layout', announ: announ, department: department, users:users, auth:req.auth})
             })
         })
     })
@@ -79,7 +79,7 @@ Router.post('/login', loginValidator, (req, res) => {
             }, (err, token) => {
                 if (err) throw err
                 req.token = token
-                return res.json({
+                res.json({
                     code: 0,
                     message:'Đăng nhập thành công',
                     email : account.email,
@@ -87,7 +87,7 @@ Router.post('/login', loginValidator, (req, res) => {
                     department_id: account.department_id,
                     token: token
                 })
-                // return req.setHeader('Authorization',"Bearer " + token).json({ message: token })
+                return res.redirect('/');
                 
             })
         })

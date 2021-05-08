@@ -11,6 +11,7 @@ const AnnouncementRouter = require('./routers/AnnouncementRouter')
 const CategoriesRouter = require('./routers/CategoriesRouter')
 const CommentRouter = require('./routers/CommentRouter')
 const DepartmentRouter = require('./routers/DepartmentRouter')
+const CookieParser = require('cookie-parser')
 require('dotenv').config()
 
 const PORT = process.env.PORT
@@ -18,38 +19,37 @@ app.set("view engine", "ejs")
 app.use(expressLayouts);
 app.set('layout','./layouts/layout')
 
-
+app.use(CookieParser())
 app.use(express.urlencoded({extended: false}))
 app.use(express.json())
 app.use(cors())
 
-app.use('/account', AccountRouter)
-app.use('/post', Post)
-app.use('/announ', AnnouncementRouter)
-app.use('/cate', CategoriesRouter)
-app.use('/comment', CommentRouter)
-app.use('/department', DepartmentRouter)
+const CheckLogin = require('./auth/CheckLogin')
 
 //static file
 app.use(express.static('public'))
 
 const Annoucement = require('./models/content/annoucement/annoucement.model')
-app.get('',(req,res) => {
+app.get('',CheckLogin,(req,res) => {
     Annoucement.find()
     .then(announ => {
         // console.log(annou)
         // res.render('notification_list',{ layout: '../views/layouts/notification_layout', announ: announ})
-        res.render('index', {announ: announ})
+        res.render('index', {announ: announ, auth:req.auth})
     })
    
 })
-
-
 
 app.get('/login',(req,res) => {
     res.render('login',{ layout: './layouts/layout_login' })
 })
 
+app.use('/account', AccountRouter)
+app.use('/post',CheckLogin, Post)
+app.use('/announ',CheckLogin, AnnouncementRouter)
+app.use('/cate',CheckLogin, CategoriesRouter)
+app.use('/comment',CheckLogin, CommentRouter)
+app.use('/department',CheckLogin, DepartmentRouter)
 
 
 app.all('*', (req, res) => res.json({code:101, message: 'Đường dẫn hoặc phương thức không được hỗ trợ'}))

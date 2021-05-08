@@ -14,7 +14,8 @@ Router.get('/',(req, res) => {
         Department.find()
         .then(department => {
             // console.log(department)
-            res.render('department.ejs',{ layout: './layouts/layout', department: department, announ: announ})
+            console.log(req.auth)
+            res.render('department.ejs',{ layout: './layouts/layout', department: department, announ: announ, auth:req.auth})
         })
     })
 })

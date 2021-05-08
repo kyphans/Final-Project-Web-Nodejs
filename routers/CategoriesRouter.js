@@ -8,13 +8,13 @@ const Annoucement = require('../models/content/annoucement/annoucement.model')
 
 
 
-Router.get('/',(req, res) => {
+Router.get('/',CheckLogin,(req, res) => {
     Annoucement.find()
     .then(announ => {
         Categories.find()
         .then(category => {
             // console.log(category)
-            res.render('categories.ejs',{ layout: './layouts/layout', data: category, announ:announ })
+            res.render('categories.ejs',{ layout: './layouts/layout', data: category, announ:announ, auth:req.auth })
         })
     })
 })
