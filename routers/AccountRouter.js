@@ -79,16 +79,11 @@ Router.post('/login', loginValidator, (req, res) => {
             }, (err, token) => {
                 if (err) throw err
                 req.token = token
-                res.json({
+                return res.json({
                     code: 0,
                     message:'Đăng nhập thành công',
-                    email : account.email,
-                    name: account.name,
-                    department_id: account.department_id,
                     token: token
                 })
-                return res.redirect('/');
-                
             })
         })
         .catch(e => {

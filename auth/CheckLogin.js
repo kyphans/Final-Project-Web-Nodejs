@@ -30,8 +30,9 @@ module.exports = (req, res, next) => {
     ]
 
     if (!token) {
-        return res.status(401)
-            .json({ code: 101, message: "Vui long cung cap token hop le" })
+        // return res.status(401)
+        //     .json({ code: 101, message: "Vui long cung cap token hop le" })
+        return res.redirect('/login');
     }
 
     jwt.verify(token, JWT_SECRET, (err, data) => {

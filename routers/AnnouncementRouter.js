@@ -21,23 +21,12 @@ Router.get('/create', (req, res) => {
     .then(announ => {
         Categories.find()
         .then(cate => {
-            res.render('create_annou.ejs',{ layout: './layouts/layout', announ: announ, cate: cate})
+            res.render('create_annou.ejs',{ layout: './layouts/layout', announ: announ, cate: cate, auth:req.auth})
         })
     })
     
     
 })
-
-// Router.get('/', CheckLogin ,(req, res) => {
-//     Annoucement.find().select('type title created_at modified_at author attachments')
-//     .then(annoucement => {
-//         res.json({
-//             code: 0,
-//             message: 'Đọc danh sách sản phẩm thành công',
-//             data: annoucement
-//         })
-//     })
-// })
 
 Router.post('/', (req, res) => {
     let result = validationResult(req)
