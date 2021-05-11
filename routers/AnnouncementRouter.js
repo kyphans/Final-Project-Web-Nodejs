@@ -41,8 +41,9 @@ Router.post('/', (req, res) => {
 
         annoucement.save()
         .then(() => {
-            return res.json({code: 0, message: 'Thêm post thành công',
-                data: annoucement})
+            // return res.json({code: 0, message: 'Thêm post thành công',
+            //     data: annoucement})
+            res.redirect("/announ")
         })
         .catch(e => {
             return res.json({code: 2, message: e.message})

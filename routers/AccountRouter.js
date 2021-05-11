@@ -9,6 +9,7 @@ const Department = require('../models/department.model')
 const registerValidator = require('./validators/registerValidator')
 const loginValidator = require('./validators/loginValidator')
 const CheckLogin = require('../auth/CheckLogin')
+const fs = require('fs')
 
 
 Router.get('/',CheckLogin, (req, res) => {
@@ -127,12 +128,12 @@ Router.post('/register', registerValidator, (req, res) => {
                 categories: categories
             })
             user.save();
-            return res.json({code: 0, message: 'Đăng ký tài khoản thành công', data: user})
+            const {root} = req.vars
+            const userDir = `${root}/users/${email}`
+            fs.mkdir(userDir, ()=>{
+                return res.json({code: 0, message: 'Đăng ký tài khoản thành công', data: user})
+            })
         })
-        // .then(() => {
-        //     // không cần trả về chi tiết tài khoản nữa
-        //     return res.json({code: 0, message: 'Đăng ký tài khoản thành công', data: user})
-        // })
         .catch(e => {
             return res.json({code: 2, message: 'Đăng ký tài khoản thất bại: ' + 
                                 e.message})

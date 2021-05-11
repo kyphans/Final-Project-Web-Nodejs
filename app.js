@@ -19,6 +19,11 @@ app.set("view engine", "ejs")
 app.use(expressLayouts);
 app.set('layout','./layouts/layout')
 
+
+app.use((req,res,next) => {
+    req.vars = {root: __dirname}
+    next()
+})
 app.use(CookieParser())
 app.use(express.urlencoded({extended: false}))
 app.use(express.json())
