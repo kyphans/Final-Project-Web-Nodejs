@@ -2,9 +2,15 @@ const { json } = require('express')
 const expressLayouts = require('express-ejs-layouts')
 const express = require('express')
 const app = express()
+const multer= require('multer')
+const fileUpload = require('express-fileupload');
+const _ = require('lodash');
+const morgan = require('morgan');
 
 const mongoose = require('mongoose')
 const cors = require('cors')
+const uploadModel = require('./models/image_model')
+const Account = require('./models/user.model')
 const AccountRouter = require('./routers/AccountRouter')
 const Post = require('./routers/PostRouter')
 const AnnouncementRouter = require('./routers/AnnouncementRouter')
@@ -34,8 +40,30 @@ const CheckLogin = require('./auth/CheckLogin')
 //static file
 app.use(express.static('public'))
 
+
+app.use(fileUpload({
+    createParentPath: true
+}));
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length,c.length);
+        }
+    }
+    return "";
+}
+
+
+
 const Annoucement = require('./models/content/annoucement/annoucement.model')
-app.get('',CheckLogin,(req,res) => {
+app.get('/',CheckLogin,(req,res) => {
     Annoucement.find()
     .then(announ => {
         // console.log(annou)
@@ -46,8 +74,60 @@ app.get('',CheckLogin,(req,res) => {
 })
 
 app.get('/login',(req,res) => {
-    res.render('login',{ layout: './layouts/layout_login' })
+    res.render('login',{ layout: './layouts/layout_login'})
 })
+
+
+app.post('/edit-info', async (req, res) => {
+    try {
+        if(!req.files.filename) {
+            res.send({
+                status: false,
+                message: 'No file uploaded'
+            });
+        } else {
+            //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
+            let avatar = req.files.filename;
+            let email = req.cookies.email
+                avatar.mv(`./users-list/${email}/` + avatar.name);
+                console.log(email);
+                  
+            return res.json({
+                status: true,
+                message: 'File is uploaded',
+                data: {
+                    
+                    name: avatar.name,
+                    mimetype: avatar.mimetype,
+                    size: avatar.size
+                }
+            });
+        }
+    } catch (err) {
+        res.status(500).send(err);
+    }
+});
+
+
+
+
+
+app.get('/edit-info',CheckLogin,(req,res, next) => {
+    
+    Annoucement.find()
+    .then(announ => {
+        // console.log(annou)
+        // res.render('notification_list',{ layout: '../views/layouts/notification_layout', announ: announ})
+        
+        
+        res.render('edit-info', {announ: announ, auth:req.auth})
+    })
+    
+
+    
+})
+
+
 
 app.use('/account', AccountRouter)
 app.use('/post',CheckLogin, Post)

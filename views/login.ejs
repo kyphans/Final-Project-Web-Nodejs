@@ -1,80 +1,81 @@
 <div class="container-fluid">
-    <div class="container">
+  <div class="container">
+      
+      <div class="wrapper fadeInDown">
+          <div id="formContent">
+            <!-- Tabs Titles -->
         
-        <div class="wrapper fadeInDown">
-            <div id="formContent">
-              <!-- Tabs Titles -->
-          
-              <!-- Icon -->
-              <div class="fadeIn first">
-                <i class="fas fa-user" style="font-size: 60px; margin: 50px 10px 10px 10px; color: #56baed; "></i>
-                <!-- <img src="https://www.flaticon.com/svg/vstatic/svg/1946/1946429.svg?token=exp=1620192564~hmac=4e6acc293ce89ad227c7b0d9c3d4e218" id="icon" alt="User Icon" style="width: 80px; padding: 10px;"/> -->
-              </div>
-          
-               <!-- Login in with google -->
-              <button type="button" class="login-with-google-btn" >
-                Sign in with Google
-              </button>
-
-              <!-- Login Form -->
-              <form action="/account/login" method="POST">
-                <input type="text" id="email" class="fadeIn second" name="email" placeholder="Email">
-                <input type="text" id="password" class="fadeIn third" name="password" placeholder="Password">
-                <input type="submit" class="fadeIn fourth" value="Log In" onclick="login()">
-              </form>
-          
-              <!-- Remind Passowrd -->
-              <div id="formFooter">
-                <a class="underlineHover" href="#">Forgot Password?</a>
-              </div>
-          
+            <!-- Icon -->
+            <div class="fadeIn first">
+              <i class="fas fa-user" style="font-size: 60px; margin: 50px 10px 10px 10px; color: #56baed; "></i>
+              <!-- <img src="https://www.flaticon.com/svg/vstatic/svg/1946/1946429.svg?token=exp=1620192564~hmac=4e6acc293ce89ad227c7b0d9c3d4e218" id="icon" alt="User Icon" style="width: 80px; padding: 10px;"/> -->
             </div>
-          </div>
+        
+             <!-- Login in with google -->
+            <button type="button" class="login-with-google-btn" >
+              Sign in with Google
+            </button>
 
-    </div>
+            <!-- Login Form -->
+            <form action="/account/login" method="POST">
+              <input type="text" id="email" class="fadeIn second" name="email" placeholder="Email">
+              <input type="text" id="password" class="fadeIn third" name="password" placeholder="Password">
+              <input type="submit" class="fadeIn fourth" value="Log In" onclick="login()">
+            </form>
+        
+            <!-- Remind Passowrd -->
+            <div id="formFooter">
+              <a class="underlineHover" href="#">Forgot Password?</a>
+            </div>
+        
+          </div>
+        </div>
+
+  </div>
 </div>
 
 
 <script>
-  function setCookie(cname, cvalue, exdays) {
-  var d = new Date();
-  d.setTime(d.getTime() + (exdays*24*60*60*1000));
-  var expires = "expires="+ d.toUTCString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+function setCookie(cname, cvalue, exdays) {
+var d = new Date();
+d.setTime(d.getTime() + (exdays*24*60*60*1000));
+var expires = "expires="+ d.toUTCString();
+document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 
 function getCookie(cname) {
-  var name = cname + "=";
-  var decodedCookie = decodeURIComponent(document.cookie);
-  var ca = decodedCookie.split(';');
-  for(var i = 0; i <ca.length; i++) {
-    var c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
+var name = cname + "=";
+var decodedCookie = decodeURIComponent(document.cookie);
+var ca = decodedCookie.split(';');
+for(var i = 0; i <ca.length; i++) {
+  var c = ca[i];
+  while (c.charAt(0) == ' ') {
+    c = c.substring(1);
   }
-  return "";
+  if (c.indexOf(name) == 0) {
+    return c.substring(name.length, c.length);
+  }
+}
+return "";
 }
 
 function login()
 {
-  $.ajax({
-    url : '/account/login',
-    type: 'POST',
-    data:
-    {
-        email: $("#email").val(),
-        password: $("#password").val()
-    }
-  }).then(data=>{
-    setCookie('token', data.token, 0)
-    setCookie('token', data.token, 1)
-    window.location.href = '/';
-  }).catch(err =>{
-    console.log(err)
-  })
+$.ajax({
+  url : '/account/login',
+  type: 'POST',
+  data:
+  {
+      email: $("#email").val(),
+      password: $("#password").val()
+  }
+}).then(data=>{
+  
+  setCookie('token', data.token, 1)
+  setCookie('email', data.email, 1)
+  window.location.href = '/';
+}).catch(err =>{
+  console.log(err)
+})
 }
 </script>

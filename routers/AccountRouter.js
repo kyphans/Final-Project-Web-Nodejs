@@ -83,7 +83,8 @@ Router.post('/login', loginValidator, (req, res) => {
                 return res.json({
                     code: 0,
                     message:'Đăng nhập thành công',
-                    token: token
+                    token: token,
+                    email: account.email
                 })
             })
         })
@@ -129,7 +130,7 @@ Router.post('/register', registerValidator, (req, res) => {
             })
             user.save();
             const {root} = req.vars
-            const userDir = `${root}/users/${email}`
+            const userDir = `${root}/users-list/${user.email}`
             fs.mkdir(userDir, ()=>{
                 return res.json({code: 0, message: 'Đăng ký tài khoản thành công', data: user})
             })
@@ -200,4 +201,7 @@ Router.put('/:id', (req, res) => {
                 return res.json({code: 3, message: e.message})
         })
 })
+
+
+
 module.exports = Router
