@@ -60,17 +60,7 @@ app.get('/login',(req,res) => {
 })
 
 
-app.get('/edit-info',CheckLogin,(req,res, next) => {
-    
-    Annoucement.find()
-    .then(announ => {
-        // console.log(annou)
-        // res.render('notification_list',{ layout: '../views/layouts/notification_layout', announ: announ})
-        
-        
-        res.render('edit-info', {announ: announ, auth:req.auth})
-    })
-})
+
 
 
 
