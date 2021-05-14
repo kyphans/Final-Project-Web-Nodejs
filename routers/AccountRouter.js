@@ -222,7 +222,7 @@ Router.post('/edit-info', async (req, res) => {
         } else {
             //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
             let avatar = req.files.filename;
-            let email = req.cookies.email
+            let email = req.body.email
                 avatar.mv(`./users-list/${email}/` + avatar.name);
                 console.log(email);
                   
@@ -248,9 +248,7 @@ Router.get('/edit-info',CheckLogin,(req,res, next) => {
     .then(announ => {
         // console.log(annou)
         // res.render('notification_list',{ layout: '../views/layouts/notification_layout', announ: announ})
-        
-        
-        res.render('edit-info', {announ: announ, auth:req.auth})
+        res.render('edit-info',{announ: announ, auth:req.auth})
     })
 })
 
