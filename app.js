@@ -6,7 +6,6 @@ const multer= require('multer')
 const fileUpload = require('express-fileupload');
 const _ = require('lodash');
 const morgan = require('morgan');
-
 const mongoose = require('mongoose')
 const cors = require('cors')
 const uploadModel = require('./models/image_model')
@@ -19,6 +18,7 @@ const CommentRouter = require('./routers/CommentRouter')
 const DepartmentRouter = require('./routers/DepartmentRouter')
 const CookieParser = require('cookie-parser')
 const Annoucement = require('./models/content/annoucement/annoucement.model')
+const CheckLogin = require('./auth/CheckLogin')
 
 require('dotenv').config()
 
@@ -37,14 +37,9 @@ app.use(express.urlencoded({extended: false}))
 app.use(express.json())
 app.use(cors())
 
-const CheckLogin = require('./auth/CheckLogin')
-
 //static file
 app.use(express.static('public'))
 
-
-
-const Annoucement = require('./models/content/annoucement/annoucement.model')
 app.get('/',CheckLogin,(req,res) => {
     Annoucement.find()
     .then(announ => {
@@ -58,11 +53,6 @@ app.get('/',CheckLogin,(req,res) => {
 app.get('/login',(req,res) => {
     res.render('login',{ layout: './layouts/layout_login'})
 })
-
-
-
-
-
 
 app.use('/account', AccountRouter)
 app.use('/post',CheckLogin, Post)
