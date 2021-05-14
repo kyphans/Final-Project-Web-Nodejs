@@ -18,6 +18,8 @@ const CategoriesRouter = require('./routers/CategoriesRouter')
 const CommentRouter = require('./routers/CommentRouter')
 const DepartmentRouter = require('./routers/DepartmentRouter')
 const CookieParser = require('cookie-parser')
+const Annoucement = require('./models/content/annoucement/annoucement.model')
+
 require('dotenv').config()
 
 const PORT = process.env.PORT
@@ -39,12 +41,9 @@ const CheckLogin = require('./auth/CheckLogin')
 
 //static file
 app.use(express.static('public'))
-
-
 app.use(fileUpload({
     createParentPath: true
 }));
-
 function getCookie(cname) {
     var name = cname + "=";
     var ca = document.cookie.split(';');
@@ -60,9 +59,6 @@ function getCookie(cname) {
     return "";
 }
 
-
-
-const Annoucement = require('./models/content/annoucement/annoucement.model')
 app.get('/',CheckLogin,(req,res) => {
     Annoucement.find()
     .then(announ => {
@@ -108,10 +104,6 @@ app.post('/edit-info', async (req, res) => {
     }
 });
 
-
-
-
-
 app.get('/edit-info',CheckLogin,(req,res, next) => {
     
     Annoucement.find()
@@ -122,9 +114,6 @@ app.get('/edit-info',CheckLogin,(req,res, next) => {
         
         res.render('edit-info', {announ: announ, auth:req.auth})
     })
-    
-
-    
 })
 
 
