@@ -162,17 +162,17 @@
 	</div>
 </div>
 <!-- Delete Modal HTML -->
-<% users.forEach((element, index) => { %> 
-	<%- 
-	`<div id="deleteUserModal" class="modal fade">
+<% 
+	for(var i=0;i<users.length;i++) { %>  
+	<div id="deleteUserModal" class="modal fade">
 	
 	<div class="modal-dialog">
 		<div class="modal-content">
 			
-			<form id="${index+1}">
+			<form>
 				<div class="modal-header">		
 									
-					<h4 class="modal-title ${element.name}"><b> ${element.name}</b></h4>
+					<h4 class="modal-title <%= users[i].name %>"><b><%= users[i].name %> </b></h4>
 					
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				</div>
@@ -182,8 +182,9 @@
 				</div>
 				<div class="modal-footer">
 					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-					
-						<input type="submit" class="btn btn-danger" value="Delete" onclick="deleteUser()">
+					<a href="/account/<%= users[i].id %>" type="submit" class="btn btn-danger" value="Delete" >
+						Delete</a>
+						
 				</div>
 			</form>
 			
@@ -191,9 +192,9 @@
 		 
 	</div>
 	
-</div>`
-%>
-<% });  %> 
+</div>
+
+<% }  %> 
 <script src="/javascripts/table_script.js"></script>
 
 <script>
