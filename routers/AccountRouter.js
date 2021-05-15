@@ -254,12 +254,14 @@ Router.post('/edit-info', async (req, res) => {
                 message: 'No file uploaded'
             });
         } else {
+            
             //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
             let avatar = req.files.filename;
-            let email = req.auth.email
+            let email = req.body.email
+            
                 avatar.mv(`./users-list/${email}/` + avatar.name);
                 console.log(email);
-                  
+            
             return res.json({
                 status: true,
                 message: 'File is uploaded',

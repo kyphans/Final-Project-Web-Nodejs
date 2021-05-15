@@ -162,17 +162,17 @@
 	</div>
 </div>
 <!-- Delete Modal HTML -->
-<% users.forEach((element, index) => { %> 
-	<%- 
-	`<div id="deleteUserModal" class="modal fade">
+<% 
+	for(var i=0;i<users.length;i++) { %>  
+	<div id="deleteUserModal" class="modal fade">
 	
 	<div class="modal-dialog">
 		<div class="modal-content">
 			
-			<form id="${index+1}">
+			<form>
 				<div class="modal-header">		
 									
-					<h4 class="modal-title ${element.name}"><b> ${element.name}</b></h4>
+					<h4 class="modal-title <%= users[i].name %>"><b><%= users[i].name %> </b></h4>
 					
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				</div>
@@ -182,8 +182,9 @@
 				</div>
 				<div class="modal-footer">
 					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-					
-						<input type="submit" class="btn btn-danger" value="Delete" onclick="deleteUser()">
+					<a href="/account/<%= users[i].id %>" type="submit" class="btn btn-danger" value="Delete" >
+						Delete</a>
+						
 				</div>
 			</form>
 			
@@ -191,9 +192,9 @@
 		 
 	</div>
 	
-</div>`
-%>
-<% });  %> 
+</div>
+
+<% }  %> 
 <script src="/javascripts/table_script.js"></script>
 
 <script>
@@ -304,24 +305,25 @@
 		});
 	}
 	
-	function deleteUser(__id) {
+	function deleteUser() {
 		let get_id = $("#_id").text()
-	
-        let url = "/account/"+ __id
+		let get_name = $("#edit-name").val()
+		let get_tr_id = $("#tr_id").text()
+        let url = "/account/"+ get_id
 		$.ajax({
 			type: "DELETE",
 			url: url,
 			data:{
 				"id" : get_id,
-				"name":$("#Name").val(),
+				"name":get_name,
 			},
 			success: (data)=>{
 				let json = data.data
-
+				$("#"+get_tr_id).remove()
 				$("form").append(
 					`<div class="modal-header">		
 									
-									<h4 class="modal-title ${json.name}"><b> ${json.name} </b></h4>
+									<h4 class="modal-title ${get_name}"><b> ${get_name} </b></h4>
 									
 									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 								</div>
@@ -332,7 +334,7 @@
 								<div class="modal-footer">
 									<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
 									
-										<input type="submit" class="btn btn-danger" value="Delete" onclick="deleteUser(${json._id})">
+										<input type="submit" class="btn btn-danger" value="Delete" onclick="deleteUser()">
 								</div>` 
 				)
 				$("#deleteUserModal").modal('toggle')
