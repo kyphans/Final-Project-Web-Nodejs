@@ -7,7 +7,10 @@ const postSchema = new Schema({
   comment_count: Number,
   created_at: Date,
   modified_at: Date,
-  user_id: String,
+  _userId: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: "accounts",
+  },
   attachments: [
     {
       type: String,

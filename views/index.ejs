@@ -1,11 +1,16 @@
-<form class="my-3">
+<%- auth.id %>
+<form action="/post" class="my-3" method="POST">
     <div class="form-group">
-        <textarea class="form-control" id="exampleFormControlTextarea1"
-            rows="3" placeholder="Write something"></textarea>
+        <textarea class="form-control" id="content"
+            rows="3" placeholder="Bạn đang suy nghĩ gì?" name="content"></textarea>
+        <input id="id-user" name="user_id" value="<%- auth.id %>" hidden>
     </div>
     <button type="submit" class="btn btn-primary ml-auto">Post</button>
 </form>
-<div class="fb-cards-designs">
+
+<% post.forEach((element, index) => { %> 
+    <%- 
+    `<div class="fb-cards-designs">
     <div class="fb-clone-card">
         <div class="fb-card-main-content">
             <div class="fb-card-header">
@@ -14,8 +19,8 @@
                         <img src="https://randomuser.me/api/portraits/men/94.jpg" class="img-responsive" />
                     </div>
                     <div class="user-information">
-                        <p>John Son</p>
-                        <small>2 hr</small>
+                        <p>${element.user.name}</p>
+                        <small>${element.created_at.toLocaleString()}</small>
                     </div>
                 </div>
                 <div class="post-action">
@@ -24,7 +29,7 @@
             </div>
 
             <div class="fb-card-body simple-text-card simple-image-card">
-                <p>Isn't It Beautiful?</p>
+                <p>${element.content}</p>
                 <div class="images-container">
                     <img src="https://raw.githubusercontent.com/karthikricssion/facebook-card-design/master/assets/images/sample_joker_poster.jpg"
                         class="img-responsive" />
@@ -36,10 +41,10 @@
         <div class="fb-card-like-comment-holder">
             <div class="fb-card-like-comment">
                 <div class="likes-emoji-holder">
-                    <span>14 Likes</span>
+                    <span>${element.like_count} Likes</span>
                 </div>
                 <div class="like-comment-holder">
-                    <span>10 Commnets</span>
+                    <span>${element.comment_count} Commnets</span>
                 </div>
             </div>
         </div>
@@ -72,6 +77,9 @@
     </div>
 </div>
 <div class="created-by" style="text-align:center;margin-bottom:16px;"></div>
+    `
+    %>
+<% });  %> 
 
 
 <script>

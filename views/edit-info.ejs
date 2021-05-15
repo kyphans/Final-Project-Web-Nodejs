@@ -1,30 +1,17 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Bootstrap Example</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</head>
-<body> -->
 
-<!-- <div class="container mt-3"> -->
   <h2>Edit Profile</h2>
   <br>
-  <form id='form' action="/account/edit-info" method="get">
-    <p>File upload:</p>
-    <div class="custom-file mb-3">
-      <input type="file" class="custom-file-input" id="filename" name="filename">
-      <label class="custom-file-label" for="customFile">Choose file</label>
-    </div>
-  
-    <div class="mt-3">
-      <button id="uploadButton" type="submit" class="btn btn-primary" >Submit</button>
-    </div>
-  </form>
+  <p>File upload:</p>
+  <div id="email"><%- auth.email  %></div>
+  <div class="custom-file mb-3">
+    <input type="file" class="custom-file-input" id="filename" name="filename">
+    <label class="custom-file-label" for="customFile">Choose file</label>
+  </div>
+
+  <div class="mt-3">
+    <button id="uploadButton" type="submit" class="btn btn-primary" >Submit</button>
+  </div>
+
   
 <!-- </div> -->
 
@@ -51,8 +38,7 @@
     return "";
   }
 
-  $(document).ready(() => {
-    $('#uploadButton').click(() => {
+  $('#uploadButton').click(() => {
       let uploadFile = document.getElementById('filename');
       if (uploadFile.files.length === 0) {
         return alert('Vui long chon tap tin')
@@ -60,33 +46,19 @@
 
       let file = uploadFile.files[0];
       let form = new FormData();
-      form.set('email', getCookie(email));
+      form.set('email', $("#email").text());
       form.set('path', '')
       form.set('filename', file)
 
       let xhr = new XMLHttpRequest();
-
-      xhr.open('POST', 'http://localhost:3030/edit-info');
+      xhr.open('POST', 'http://localhost:3030/account/edit-info',true)
       xhr.addEventListener('load', e => {
-        if (xhr.readyState === 4 && xhr.status === 200) {
+        if(xhr.readyState === 4 && xhr.status === 200){
           const json = JSON.parse(xhr.responseText)
           console.log(json)
         }
-      });
-
-      /*let indicator = document.getElementById('progress-indicator')
-
-      xhr.upload.addEventListener('progress', e =>{
-          let loaded = e.loaded
-          let total = e.total
-          let progress = Math.round(loaded * 100 / total)
-
-          console.log('Uploading ' + progress + '%')
-          indicator.style.width = progress + '%'
-      })*/
-
-      xhr.send(form);
+      })
+      xhr.send(form)
     })
-  })
 
 </script>
