@@ -83,7 +83,7 @@ Router.delete('/:id', CheckLogin, (req, res) => {
         {
             if(p)
             {
-                return res.json({code: 0, message: 'Da xoa '})
+                return res.location('/department')
             }else
                 return res.json({code: 2, message: 'Khong xoa duoc '})
         })
