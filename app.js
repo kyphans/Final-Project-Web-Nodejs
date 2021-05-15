@@ -2,9 +2,15 @@ const { json } = require('express')
 const expressLayouts = require('express-ejs-layouts')
 const express = require('express')
 const app = express()
-
+const multer= require('multer')
+const fileUpload = require('express-fileupload');
+const _ = require('lodash');
+const morgan = require('morgan');
 const mongoose = require('mongoose')
 const cors = require('cors')
+const Department = require('./models/department.model')
+const uploadModel = require('./models/image_model')
+const Account = require('./models/user.model')
 const AccountRouter = require('./routers/AccountRouter')
 const Post = require('./routers/PostRouter')
 const AnnouncementRouter = require('./routers/AnnouncementRouter')
@@ -12,6 +18,10 @@ const CategoriesRouter = require('./routers/CategoriesRouter')
 const CommentRouter = require('./routers/CommentRouter')
 const DepartmentRouter = require('./routers/DepartmentRouter')
 const CookieParser = require('cookie-parser')
+const Annoucement = require('./models/content/annoucement/annoucement.model')
+const CheckLogin = require('./auth/CheckLogin')
+const PostDetail = require('./models/content/post/post.model')
+
 require('dotenv').config()
 
 const PORT = process.env.PORT
@@ -29,13 +39,10 @@ app.use(express.urlencoded({extended: false}))
 app.use(express.json())
 app.use(cors())
 
-const CheckLogin = require('./auth/CheckLogin')
-
 //static file
 app.use(express.static('public'))
 
-const Annoucement = require('./models/content/annoucement/annoucement.model')
-app.get('',CheckLogin,(req,res) => {
+app.get('/',CheckLogin,(req,res) => {
     Annoucement.find()
     .then(announ => {
         // console.log(annou)
@@ -46,11 +53,11 @@ app.get('',CheckLogin,(req,res) => {
 })
 
 app.get('/login',(req,res) => {
-    res.render('login',{ layout: './layouts/layout_login' })
+    res.render('login',{ layout: './layouts/layout_login'})
 })
 
 app.use('/account', AccountRouter)
-app.use('/post',CheckLogin, Post)
+app.use('/post', Post)
 app.use('/announ',CheckLogin, AnnouncementRouter)
 app.use('/cate',CheckLogin, CategoriesRouter)
 app.use('/comment',CheckLogin, CommentRouter)

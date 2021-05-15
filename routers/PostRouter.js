@@ -20,7 +20,7 @@ Router.get('/' ,(req, res) => {
 Router.post('/', (req, res) => {
     let result = validationResult(req)
     if (result.errors.length === 0) {
-        let content ="None"
+        
         const {type, post_content_id,like_count, comment_count, created_at, modified_at, user_id, attachments} = req.body
         let post = new Post({
             type, post_content_id, like_count, comment_count, created_at, modified_at, user_id, attachments,content

@@ -60,30 +60,23 @@ Router.post('/', (req, res) => {
     }
 })
 
-Router.get('/:id',(req, res) => {
+Router.get('/:id',CheckLogin, (req, res) => {
     let {id} = req.params
-    if(!id)
-    {
-        return res.json({code: 1, message: 'Khong co thong tin'})
+    if(!id){
+        return res.json({code: 1, message: 'Loi'})
     }
     Annoucement.findById(id)
-    .then(p =>
+    .then(announ => {
+        // console.log(annou)
+        // res.render('notification_list',{ layout: '../views/layouts/notification_layout', announ: announ})
+        if(announ)
         {
-            if(p)
-            {
-                return res.json({code: 0, message: 'Da tim thay san pham', data: p})
-            }else
-                return res.json({code: 2, message: 'Khong tim thay san pham'})
-        })
-    .catch(e =>
-        {
-            if(e.message.includes('Cast to ObjectId failed'))
-            {
-                return ress.json({code: 3, message: 'Day khong phai la mot id hop le'})
-            }
-                return ress.json({code: 3, message: e.message})
-        })
+            res.render('noti_detail',{ layout: '../views/layouts/detail_noti_layout', announ: announ, auth:req.auth})
+        }
+        
+    })
 })
+
 
 Router.delete('/:id', CheckLogin, (req, res) => {
     let {id} = req.params

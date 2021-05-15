@@ -9,7 +9,18 @@ const Department = require('../models/department.model')
 const registerValidator = require('./validators/registerValidator')
 const loginValidator = require('./validators/loginValidator')
 const CheckLogin = require('../auth/CheckLogin')
+const CookieParser = require('cookie-parser')
 const fs = require('fs')
+const multer= require('multer')
+const fileUpload = require('express-fileupload');
+const _ = require('lodash');
+const morgan = require('morgan');
+
+
+Router.use(CookieParser())
+Router.use(fileUpload({
+    createParentPath: true
+}));
 
 
 Router.get('/',CheckLogin, (req, res) => {
@@ -45,8 +56,12 @@ Router.get('/',CheckLogin, (req, res) => {
             Department.find()
             .then(department => {
                 // console.log(department)
-                res.render('users.ejs',{ layout: './layouts/layout', announ: announ, department: department, users:users, auth:req.auth})
+                res.render('users',{ layout: './layouts/layout', announ: announ, department: department, users:users, auth:req.auth})
             })
+            .then(edit => {
+                res.render('edit-info',{ layout: './layouts/layout', edit: edit, announ: announ, department: department, users:users, auth:req.auth})
+            })
+            
         })
     })
     
@@ -83,7 +98,8 @@ Router.post('/login', loginValidator, (req, res) => {
                 return res.json({
                     code: 0,
                     message:'Đăng nhập thành công',
-                    token: token
+                    token: token,
+                    email: account.email
                 })
             })
         })
@@ -129,7 +145,7 @@ Router.post('/register', registerValidator, (req, res) => {
             })
             user.save();
             const {root} = req.vars
-            const userDir = `${root}/users/${email}`
+            const userDir = `${root}/users-list/${user.email}`
             fs.mkdir(userDir, ()=>{
                 return res.json({code: 0, message: 'Đăng ký tài khoản thành công', data: user})
             })
@@ -200,4 +216,74 @@ Router.put('/:id', (req, res) => {
                 return res.json({code: 3, message: e.message})
         })
 })
+
+Router.delete('/:id', (req, res) => {
+    let {id} = req.params
+    if(!id)
+    {
+        return res.json({code: 1, message: 'Khong co thong tin ma san pham'})
+    }
+    Account.findOneAndDelete(id)
+    .then(p =>
+        {
+            if(p)
+            {
+                return res.location('/account')
+            }else
+                return res.json({code: 2, message: 'Khong xoa duoc san pham'})
+        })
+    .catch(e =>
+        {
+            if(e.message.includes('Cast to ObjectId failed'))
+            {
+                return ress.json({code: 3, message: 'Day khong phai la mot id hop le'})
+            }
+                return ress.json({code: 3, message: e.message})
+        })
+})
+
+
+
+Router.post('/edit-info', async (req, res) => {
+    try {
+        if(!req.files.filename) {
+            res.send({
+                status: false,
+                message: 'No file uploaded'
+            });
+        } else {
+            //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
+            let avatar = req.files.filename;
+            let email = req.auth.email
+                avatar.mv(`./users-list/${email}/` + avatar.name);
+                console.log(email);
+                  
+            return res.json({
+                status: true,
+                message: 'File is uploaded',
+                data: {
+                    
+                    name: avatar.name,
+                    mimetype: avatar.mimetype,
+                    size: avatar.size
+                }
+            });
+        }
+    } catch (err) {
+        res.status(500).send(err);
+    }
+});
+
+
+Router.get('/edit-info',CheckLogin,(req,res) => {
+    Annoucement.find()
+    .then(announ => {
+        // console.log(annou)
+        // res.render('notification_list',{ layout: '../views/layouts/notification_layout', announ: announ})
+        res.render('edit-info', {announ: announ, auth:req.auth})
+    })
+   
+})
+
+
 module.exports = Router

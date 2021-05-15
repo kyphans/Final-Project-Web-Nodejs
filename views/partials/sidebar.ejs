@@ -17,7 +17,8 @@
             </div>
             <div class="user-info">
                 <span class="user-name">
-                    <strong><%- auth.name %> </strong>
+                    <strong><a href="/"> <%- auth.name %>  </a></strong>
+                    <a href="/account/edit-info"> <i style="cursor: pointer; padding-left: 5px; color:#FACC2E;"class="far fa-edit"></i></a> 
                 </span>
                 <span class="user-role"><%- auth.role %></span>
                 <span class="user-status">
@@ -164,13 +165,14 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="/login" id="logout">
                         <i class="fas fa-sign-out-alt"></i>
                         <span>Logout</span>
                     </a>
                 </li>
             </ul>
         </div>
+       
         <!-- sidebar-menu  -->
     </div>
     <!-- sidebar-content  -->
@@ -192,3 +194,37 @@
         </a>
     </div> -->
 </nav>
+
+<script>
+    function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+  }
+  
+  function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+  
+  $(document).ready(() => {
+    $('#logout').click((data) =>
+    {
+        setCookie('email', data.email, 0)
+        setCookie('token', data.token, 0)
+        window.location.href = '/login';
+    })
+})
+  </script>
