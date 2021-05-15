@@ -12,85 +12,81 @@
 <body> -->
 
 <!-- <div class="container mt-3"> -->
-  <h2>Edit Profile</h2>
-  <br>
-  <form id='form' action="/edit-info" method="post">
-    <p>File upload:</p>
-    <div class="custom-file mb-3">
-      <input type="file" class="custom-file-input" id="filename" name="filename">
-      <label class="custom-file-label" for="customFile">Choose file</label>
-    </div>
-  
-    <div class="mt-3">
-      <button id="uploadButton" type="submit" class="btn btn-primary" >Submit</button>
-    </div>
-  </form>
-  
+<h2>Edit Profile</h2>
+<br>
+<form id='form' action="/edit-info" method="post">
+  <p>File upload:</p>
+  <div class="custom-file mb-3">
+    <input type="file" class="custom-file-input" id="filename" name="filename">
+    <label class="custom-file-label" for="customFile">Choose file</label>
+  </div>
+
+  <div class="mt-3">
+    <button id="uploadButton" type="submit" class="btn btn-primary">Submit</button>
+  </div>
+</form>
+
 <!-- </div> -->
 
 <script>
-// Add the following code if you want the name of the file appear on select
-$(".custom-file-input").on("change", function() {
-  var fileName = $(this).val().split("\\").pop();
-  $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-});
+  // Add the following code if you want the name of the file appear on select
+  $(".custom-file-input").on("change", function () {
+    var fileName = $(this).val().split("\\").pop();
+    $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+  });
 
-function getCookie(cname) {
-  var name = cname + "=";
-  var decodedCookie = decodeURIComponent(document.cookie);
-  var ca = decodedCookie.split(';');
-  for(var i = 0; i <ca.length; i++) {
-    var c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
+  function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
     }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
+    return "";
   }
-  return "";
-}
 
-$(document).ready(() => {
-            $('#uploadButton').click(() =>
-            {
-                let uploadFile = document.getElementById('filename');
-                if(uploadFile.files.length === 0){
-                    return alert('Vui long chon tap tin')
-                }
+  $(document).ready(() => {
+    $('#uploadButton').click(() => {
+      let uploadFile = document.getElementById('filename');
+      if (uploadFile.files.length === 0) {
+        return alert('Vui long chon tap tin')
+      }
 
-                let file = uploadFile.files[0];
-                let form = new FormData();
-                form.set('email',getCookie(email));
-                form.set('path', '')
-                form.set('filename', file)
-                
-                let xhr = new XMLHttpRequest();
+      let file = uploadFile.files[0];
+      let form = new FormData();
+      form.set('email', getCookie(email));
+      form.set('path', '')
+      form.set('filename', file)
 
-                xhr.open('POST','http://localhost:3030/edit-info');
-                xhr.addEventListener('load', e =>{
-                    if(xhr.readyState === 4 && xhr.status === 200){
-                        const json = JSON.parse(xhr.responseText)
-                        console.log(json)
-                    }
-                });
+      let xhr = new XMLHttpRequest();
 
-                /*let indicator = document.getElementById('progress-indicator')
+      xhr.open('POST', 'http://localhost:3030/edit-info');
+      xhr.addEventListener('load', e => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          const json = JSON.parse(xhr.responseText)
+          console.log(json)
+        }
+      });
 
-                xhr.upload.addEventListener('progress', e =>{
-                    let loaded = e.loaded
-                    let total = e.total
-                    let progress = Math.round(loaded * 100 / total)
+      /*let indicator = document.getElementById('progress-indicator')
 
-                    console.log('Uploading ' + progress + '%')
-                    indicator.style.width = progress + '%'
-                })*/
+      xhr.upload.addEventListener('progress', e =>{
+          let loaded = e.loaded
+          let total = e.total
+          let progress = Math.round(loaded * 100 / total)
 
-                xhr.send(form);
-            })
-        })
+          console.log('Uploading ' + progress + '%')
+          indicator.style.width = progress + '%'
+      })*/
+
+      xhr.send(form);
+    })
+  })
 
 </script>
-
-</body>
-</html>
