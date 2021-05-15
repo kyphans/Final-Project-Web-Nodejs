@@ -66,10 +66,9 @@ Router.get('/',CheckLogin, (req, res) => {
                 // console.log(department)
                 res.render('users',{ layout: './layouts/layout', announ: announ, department: department, users:users, auth:req.auth})
             })
-            .then(edit => {
-                res.render('edit-info',{ layout: './layouts/layout', edit: edit, announ: announ, users:users, auth:req.auth})
-            })
-            
+            // .then(edit => {
+            //     res.render('edit-info',{ layout: './layouts/layout', edit: edit, announ: announ, users:users, auth:req.auth})
+            // })
         })
     })
     
