@@ -21,6 +21,7 @@ const CookieParser = require('cookie-parser')
 const Annoucement = require('./models/content/annoucement/annoucement.model')
 const CheckLogin = require('./auth/CheckLogin')
 const PostDetail = require('./models/content/post/post.model')
+const Comments = require('./models/content/comment/comment.model')
 
 require('dotenv').config()
 
@@ -43,8 +44,41 @@ app.use(cors())
 app.use(express.static('public'))
 
 app.get('/',CheckLogin,(req,res) => {
+    let agg_comment = [
+      [
+        {
+          '$lookup': {
+            'from': 'accounts', 
+            'localField': '_userId', 
+            'foreignField': '_id', 
+            'as': 'user'
+          }
+        }, {
+          '$unwind': {
+            'path': '$user'
+          }
+        }, {
+          '$project': {
+            'user.password': 0
+          }
+        }
+      ]
+    ]
+
+    let agg_annou = [
+        {
+            '$sort': {
+                'created_at': -1
+            }
+        } 
+    ]
+
     let agg = [
         {
+            '$sort': {
+              'created_at': -1
+            }
+        }, {
           '$lookup': {
             'from': 'accounts', 
             'localField': '_userId', 
@@ -64,11 +98,14 @@ app.get('/',CheckLogin,(req,res) => {
           }
         }
       ]
-    Annoucement.find()
+    Annoucement.aggregate(agg_annou)
     .then(announ => {
         PostDetail.aggregate(agg)
         .then(post => {
-            res.render('index', {announ: announ, auth:req.auth, post:post})
+          Comments.aggregate(agg_comment)
+          .then(cmt => {
+            res.render('index', {announ: announ, auth:req.auth, post:post, cmt:cmt})
+          })
         })
     })
    

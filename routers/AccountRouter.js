@@ -24,6 +24,14 @@ Router.use(fileUpload({
 
 
 Router.get('/',CheckLogin, (req, res) => {
+    let agg_annou = [
+        {
+            '$sort': {
+                'created_at': -1
+            }
+        } 
+    ]
+
     let agg = [
         {
             '$sort': {
@@ -51,7 +59,7 @@ Router.get('/',CheckLogin, (req, res) => {
       ]
     Account.aggregate(agg)
     .then(users => {
-        Annoucement.find()
+        Annoucement.aggregate(agg_annou)
         .then(announ => {
             Department.find()
             .then(department => {
@@ -91,7 +99,7 @@ Router.post('/login', loginValidator, (req, res) => {
                 email: account.email,
                 name: account.name
             },JWT_SECRET, {
-                expiresIn: '1h'
+                expiresIn: '2h'
             }, (err, token) => {
                 if (err) throw err
                 req.token = token

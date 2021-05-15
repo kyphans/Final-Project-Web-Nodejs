@@ -9,7 +9,15 @@ const Annoucement = require('../models/content/annoucement/annoucement.model')
 
 
 Router.get('/',(req, res) => {
-    Annoucement.find()
+    let agg_annou = [
+        {
+            '$sort': {
+                'created_at': -1
+            }
+        } 
+    ]
+
+    Annoucement.aggregate(agg_annou)
     .then(announ => {
         Department.find()
         .then(department => {
