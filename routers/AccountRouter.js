@@ -59,7 +59,7 @@ Router.get('/',CheckLogin, (req, res) => {
                 res.render('users',{ layout: './layouts/layout', announ: announ, department: department, users:users, auth:req.auth})
             })
             .then(edit => {
-                res.render('edit-info',{ layout: './layouts/layout', edit: edit, announ: announ, department: department, users:users, auth:req.auth})
+                res.render('edit-info',{ layout: './layouts/layout', edit: edit, announ: announ, users:users, auth:req.auth})
             })
             
         })
@@ -67,8 +67,6 @@ Router.get('/',CheckLogin, (req, res) => {
     
     
 })
-
-
 
 Router.post('/login', loginValidator, (req, res) => {
     let result = validationResult(req)
@@ -245,7 +243,6 @@ Router.delete('/:id', (req, res) => {
 })
 
 
-
 Router.post('/edit-info', async (req, res) => {
     try {
         if(!req.files.filename) {
@@ -258,7 +255,6 @@ Router.post('/edit-info', async (req, res) => {
             //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
             let avatar = req.files.filename;
             let email = req.body.email
-            
                 avatar.mv(`./users-list/${email}/` + avatar.name);
                 console.log(email);
             

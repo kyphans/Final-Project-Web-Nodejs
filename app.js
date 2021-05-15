@@ -43,11 +43,33 @@ app.use(cors())
 app.use(express.static('public'))
 
 app.get('/',CheckLogin,(req,res) => {
+    let agg = [
+        {
+          '$lookup': {
+            'from': 'accounts', 
+            'localField': '_userId', 
+            'foreignField': '_id', 
+            'as': 'user'
+          }
+        }, {
+          '$unwind': {
+            'path': '$user'
+          }
+        }, {
+          '$project': {
+            'user.createdAt': 0, 
+            'user.updatedAt': 0, 
+            'user.password': 0, 
+            'user.__v': 0
+          }
+        }
+      ]
     Annoucement.find()
     .then(announ => {
-        // console.log(annou)
-        // res.render('notification_list',{ layout: '../views/layouts/notification_layout', announ: announ})
-        res.render('index', {announ: announ, auth:req.auth})
+        PostDetail.aggregate(agg)
+        .then(post => {
+            res.render('index', {announ: announ, auth:req.auth, post:post})
+        })
     })
    
 })
