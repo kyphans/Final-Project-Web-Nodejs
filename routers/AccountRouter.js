@@ -68,8 +68,6 @@ Router.get('/',CheckLogin, (req, res) => {
     
 })
 
-
-
 Router.post('/login', loginValidator, (req, res) => {
     let result = validationResult(req)
     if (result.errors.length === 0) {
