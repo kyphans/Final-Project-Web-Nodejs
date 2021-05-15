@@ -114,7 +114,7 @@
 			</div>
 			<div class="modal-footer">
 				<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-				<input type="submit" class="btn btn-success" value="Add" onclick="add()">
+				<input type="submit" class="btn btn-success" value="Add" onclick="addAccount()">
 			</div>
 		</div>
 	</div>
@@ -156,23 +156,23 @@
 				</div>
 				<div class="modal-footer">
 					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-					<input type="submit" class="btn btn-info" value="Save" onclick="edit()">
+					<input type="submit" class="btn btn-info" value="Save" onclick="editAccount()">
 				</div>
 		</div>
 	</div>
 </div>
 <!-- Delete Modal HTML -->
-<% users.forEach((element, index) => { %> 
-	<%- 
-	`<div id="deleteUserModal" class="modal fade">
+<% 
+	for(var i=0;i<users.length;i++) { %>  
+	<div id="deleteUserModal" class="modal fade">
 	
 	<div class="modal-dialog">
 		<div class="modal-content">
 			
-			<form id="${index+1}">
+			<form>
 				<div class="modal-header">		
 									
-					<h4 class="modal-title ${element.name}"><b> ${element.name}</b></h4>
+					<h4 class="modal-title <%= users[i].name %>"><b><%= users[i].name %> </b></h4>
 					
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				</div>
@@ -182,8 +182,9 @@
 				</div>
 				<div class="modal-footer">
 					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-					
-						<input type="submit" class="btn btn-danger" value="Delete" onclick="deleteUser()">
+					<a href="/account/<%= users[i].id %>" type="submit" class="btn btn-danger" value="Delete" >
+						Delete</a>
+						
 				</div>
 			</form>
 			
@@ -191,9 +192,9 @@
 		 
 	</div>
 	
-</div>`
-%>
-<% });  %> 
+</div>
+
+<% }  %> 
 <script src="/javascripts/table_script.js"></script>
 
 <script>
@@ -215,131 +216,6 @@
 			$("#edit-email").val(get_email)
 			$("#edit-name").val(get_name)
     });
-	function add() {	
-		$.ajax({
-			type: "POST",
-			url: "/account/register",
-			data: {
-				"name":$("#Name").val(),
-                "department_id":$("#department_id option").filter(':selected').val(),
-                "username":$("#username").val(),
-                "role":$("#role").val(),
-                "email":$("#add-email").val(),
-                "password":$("#add-password").val()
-			},
-			success: (data)=>{
-				let json = data.data
-				console.log(data)
-				$("tbody").append(
-					`<tr>
-						<td>
-							<span class="custom-checkbox">
-								<input type="checkbox" id="checkbox1" name="options[]" value="1">
-								<label for="checkbox1"></label>
-							</span>
-						</td>
-						<td>New</td>
-						<td class="id ${json.role}">${json.role}</td>
-						<td class="name ${json.name}">${json.name}</td>
-						<td>${$("#department_id option").filter(':selected').text()}</td>
-						<td>${json.email}</td>
-						<td>
-							<a href="#editUserModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-							<a href="#deleteUserModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-						</td>
-					</tr>` 
-				)
-				$("#addUserModal").modal('toggle')
-				location.reload();
-			}
-		});
-	}
-    function edit() {
-        let get_tr_id = $("#tr_id").text()
-        let get_id = $("#_id").text()
-		let get_name = $("#edit-name").val()
-		let get_deparment = $("#edit-department_id option").filter(':selected').text()
-		let get_deparment_id = $("#edit-department_id option").filter(':selected').val()
-		let get_username = 	$("#edit-username").val()
-		let get_role = "Admin da sua";
-		let get_email = $("#edit-email").val()
-        let url = "/account/"+get_id
-		// console.log(url)
-		$.ajax({
-			type: "PUT",
-			url: url,
-			data: {
-				"name":get_name,
-                "_departmentId":get_deparment_id,
-                "username":get_username,
-                "role":get_role,
-                "email":get_email
-			},
-			success: (data)=>{
-				let json = data.data
-				console.log(data)
-				$("#"+get_tr_id).remove()
-				$("tbody").append(
-					`<tr>
-						<td>
-							<span class="custom-checkbox">
-								<input type="checkbox" id="checkbox1" name="options[]" value="1">
-								<label for="checkbox1"></label>
-							</span>
-						</td>
-						<td>Update</td>
-						<td>${get_role}</td>
-						<td>${get_name}</td>
-						<td>${get_deparment}</td>
-						<td>${get_email}</td>
-						<td>
-							<a href="#editUserModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-							<a href="#deleteUserModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-						</td>
-					</tr>` 
-				)
-				$("#editUserModal").modal('toggle')
-				location.reload();
-			}
-		});
-	}
-	function deleteUser(__id) {
-		let get_id = $("#_id").text()
-	
-        let url = "/account/"+ __id
-		$.ajax({
-			type: "DELETE",
-			url: url,
-			data:{
-				"id" : get_id,
-				"name":$("#Name").val(),
-			},
-			success: (data)=>{
-				let json = data.data
-
-				$("form").append(
-					`<div class="modal-header">		
-									
-									<h4 class="modal-title ${json.name}"><b> ${json.name} </b></h4>
-									
-									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								</div>
-								<div class="modal-body">					
-									<p>Are you sure you want to delete these Records?</p>
-									<p class="text-warning"><small>This action cannot be undone.</small></p>
-								</div>
-								<div class="modal-footer">
-									<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-									
-										<input type="submit" class="btn btn-danger" value="Delete" onclick="deleteUser(${json._id})">
-								</div>` 
-				)
-				$("#deleteUserModal").modal('toggle')
-				location.reload();
-					
-			}
-		});
-	}
 </script>
 
 	

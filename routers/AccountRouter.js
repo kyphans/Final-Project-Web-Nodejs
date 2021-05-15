@@ -24,6 +24,14 @@ Router.use(fileUpload({
 
 
 Router.get('/',CheckLogin, (req, res) => {
+    let agg_annou = [
+        {
+            '$sort': {
+                'created_at': -1
+            }
+        } 
+    ]
+
     let agg = [
         {
             '$sort': {
@@ -51,17 +59,16 @@ Router.get('/',CheckLogin, (req, res) => {
       ]
     Account.aggregate(agg)
     .then(users => {
-        Annoucement.find()
+        Annoucement.aggregate(agg_annou)
         .then(announ => {
             Department.find()
             .then(department => {
                 // console.log(department)
                 res.render('users',{ layout: './layouts/layout', announ: announ, department: department, users:users, auth:req.auth})
             })
-            .then(edit => {
-                res.render('edit-info',{ layout: './layouts/layout', edit: edit, announ: announ, department: department, users:users, auth:req.auth})
-            })
-            
+            // .then(edit => {
+            //     res.render('edit-info',{ layout: './layouts/layout', edit: edit, announ: announ, users:users, auth:req.auth})
+            // })
         })
     })
     
@@ -91,7 +98,7 @@ Router.post('/login', loginValidator, (req, res) => {
                 email: account.email,
                 name: account.name
             },JWT_SECRET, {
-                expiresIn: '1h'
+                expiresIn: '2h'
             }, (err, token) => {
                 if (err) throw err
                 req.token = token
@@ -243,7 +250,6 @@ Router.delete('/:id', (req, res) => {
 })
 
 
-
 Router.post('/edit-info', async (req, res) => {
     try {
         if(!req.files.filename) {
@@ -252,12 +258,13 @@ Router.post('/edit-info', async (req, res) => {
                 message: 'No file uploaded'
             });
         } else {
+            
             //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
             let avatar = req.files.filename;
-            let email = req.auth.email
+            let email = req.body.email
                 avatar.mv(`./users-list/${email}/` + avatar.name);
                 console.log(email);
-                  
+            
             return res.json({
                 status: true,
                 message: 'File is uploaded',
