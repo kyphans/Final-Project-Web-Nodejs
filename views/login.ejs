@@ -70,7 +70,8 @@ $.ajax({
       password: $("#password").val()
   }
 }).then(data=>{
-  
+  setCookie('token', data.token, 0)
+  setCookie('email', data.email, 0)
   setCookie('token', data.token, 1)
   setCookie('email', data.email, 1)
   window.location.href = '/';

@@ -8,10 +8,9 @@
         `<div class="callout callout-info">
             <i>${element.created_at.toLocaleString()}</i>
             <br>
-            <h5>${element.title}</h5>
+            <h5><a style="cursor: pointer;" href="/announ/${element._id}"> ${element.title} </a></h5>
             ${element.content}
         </div>`
         %>
     <% });  %> 
 </div>
-

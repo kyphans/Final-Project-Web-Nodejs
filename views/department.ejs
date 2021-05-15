@@ -30,7 +30,7 @@
 							</span>
 						</th>
 						<th>STT</th>
-						<th>ID</th>
+						
 						<th>Tên</th>
 						<th></th>
 					</tr>
@@ -46,7 +46,7 @@
 									</span>
 								</td>
 								<td>${index+1}</td>
-								<td class="id ${element._id}">${element._id}</td>
+								<td class="id ${element._id}" hidden>${element._id}</td>
 								<td class="name ${element.name}">${element.name}</td>
 								<td>
 									<a href="#editDepartmentModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
@@ -115,12 +115,14 @@
 	</div>
 </div>
 <!-- Delete Modal HTML -->
-<div id="deleteDepartmentModal" class="modal fade">
+<% department.forEach((element, index) => { %> 
+	<%- 
+`<div id="deleteDepartmentModal" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<form>
 				<div class="modal-header">						
-					<h4 class="modal-title">Delete Department</h4>
+					<h4 class="modal-title ${element.name}"><b> ${element.name}</b></h4>
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				</div>
 				<div class="modal-body">					
@@ -129,13 +131,14 @@
 				</div>
 				<div class="modal-footer">
 					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-					<input type="submit" class="btn btn-danger" value="Delete">
+					<input type="submit" class="btn btn-danger" value="Delete" onclick="deleteDepartment()">
 				</div>
 			</form>
 		</div>
 	</div>
-</div>
-
+</div>`
+%>
+<% });  %> 
 <script src="/javascripts/table_script.js"></script>
 
 <script>
@@ -168,6 +171,7 @@
 					</tr>` 
 				)
 				$("#addDepartmentModal").modal('toggle')
+				location.reload();
 			}
 		});
 	}
@@ -193,7 +197,44 @@
 			success: (data)=>{
 				let json = data.data
 				$("td."+get_id).closest("tr").find("td.name").text(get_name)
+				$("#editDepartmentModal").modal('toggle')
+				location.reload();
+			}
+		});
+	}
+
+	function deleteDepartment(__id) {
+		let get_name = $("input.input-edit").val()
+		let get_id = $("div.input-id").text()
+		
+        let url = "/department/"+ __id
+		$.ajax({
+			type: "DELETE",
+			url: url,
+			data:{
+				"name":get_name,
+				"id":get_id
+			},
+			success: (data)=>{
+				let json = data.data
 				
+				$("form").append(
+					`<div class="modal-header">						
+					<h4 class="modal-title ${json.name}"><b> ${json.name}</b></h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body">					
+						<p>Are you sure you want to delete these Records?</p>
+						<p class="text-warning"><small>This action cannot be undone.</small></p>
+					</div>
+					<div class="modal-footer">
+						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+						<input type="submit" class="btn btn-danger" value="Delete" onclick="deleteDepartment(${get_id})">
+					</div>` 
+				)
+				$("#deleteDepartmentModal").modal('toggle')
+				location.reload();
+					
 			}
 		});
 	}
