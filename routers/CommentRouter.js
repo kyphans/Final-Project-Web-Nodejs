@@ -22,15 +22,17 @@ Router.get('/', CheckLogin ,(req, res) => {
 Router.post('/',CheckLogin, (req, res) => {
     let result = validationResult(req)
     if (result.errors.length === 0) {
-        const {type, post_id , user_id, content} = req.body
+        const {type, _postId , _userId, content_comment} = req.body
+        let content = content_comment
         let comment = new Comment({
-            type, post_id , user_id, content
+            type, _postId , _userId, content
         })
 
         comment.save()
         .then(() => {
-            return res.json({code: 0, message: 'Thêm post thành công',
-                data: comment})
+            // return res.json({code: 0, message: 'Thêm post thành công',
+            //     data: comment})
+            return res.redirect("/")
         })
         .catch(e => {
             return res.json({code: 2, message: e.message})

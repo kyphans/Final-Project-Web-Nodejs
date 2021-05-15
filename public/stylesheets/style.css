@@ -498,7 +498,7 @@
   margin-right: 8px;
 }
 .fb-clone-card {
-  max-width: 650px;
+  max-width: 750px;
   margin: auto;
   background-color: #fff;
   border: 1px solid #dddfe2;
@@ -631,7 +631,7 @@
   border-top: 1px solid #dadde1;
 }
 .fb-clone-card .fb-card-comments .comment-input-holder {
-  padding: 8px;
+  padding: 12px;
 }
 .fb-clone-card .fb-card-comments .comment-input-holder .user-thumb {
   width: 32px;
@@ -639,7 +639,7 @@
 }
 .fb-clone-card .fb-card-comments .comment-input-holder .comment-input {
   background-color: #f2f3f5;
-  border: 1px solid #ccd0d5;
+  /* border: 1px solid #ccd0d5; */
   border-radius: 16px;
   display: flex;
   justify-content: flex-end;

@@ -9,7 +9,14 @@ const CheckLogin = require('../auth/CheckLogin')
 
 Router.get('/',CheckLogin,(req,res) => {
     // res.render('notification_list',{ layout: '../views/layouts/notification_layout' })
-    Annoucement.find()
+    let agg = [
+        {
+            '$sort': {
+              'created_at': -1
+            }
+        }  
+    ]
+    Annoucement.aggregate(agg)
     .then(announ => {
         // console.log(annou)
         res.render('notification_list',{ layout: '../views/layouts/notification_layout', announ: announ, auth:req.auth})

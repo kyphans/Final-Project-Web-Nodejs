@@ -3,14 +3,14 @@ const Schema = mongoose.Schema;
 
 const commentSchema = new Schema({
   type: String,
-  post_id: {
+  _postId: {
     type: mongoose.SchemaTypes.ObjectId,
-    ref: "post",
+    ref: "posts",
     required: true,
   },
-  user_id: {
+  _userId: {
     type: mongoose.SchemaTypes.ObjectId,
-    ref: "user",
+    ref: "accounts",
     required: true,
   },
   content: String,
