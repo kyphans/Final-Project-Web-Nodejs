@@ -3,8 +3,9 @@ const Router = express.Router()
 const {validationResult} = require('express-validator')
 const CheckLogin = require('../auth/CheckLogin')
 const Post = require('../models/content/post/post.model')
-
-
+const Comments = require('../models/content/comment/comment.model')
+const Annoucement = require('../models/content/annoucement/annoucement.model')
+const Account = require('../models/user.model')
 
 Router.get('/' ,(req, res) => {
     Post.find()
@@ -52,56 +53,6 @@ Router.post('/', (req, res) => {
 })
 
 
-Router.post('/home', (req, res) => {
-    let result = validationResult(req)
-    if (result.errors.length === 0) {
-        
-        const {type, content, user_id, attachments} = req.body
-        let like_count = 0
-        let comment_count = 0
-        let created_at = new Date()
-        let modified_at = new Date()
-        let _userId = user_id
-        let post = new Post({
-            type, like_count, comment_count, created_at, modified_at, _userId, attachments,content
-        })
-        post.save()
-        .then(() => {
-            // return res.json({code: 0, message: 'Thêm post thành công',
-            //     data: post})
-            res.redirect("/home")
-        })
-        .catch(e => {
-            return res.json({code: 2, message: e.message})
-        })
-    }
-    else {
-        let messages = result.mapped()
-        let message = ''
-        for (m in messages) {
-            message = messages[m].msg
-            break
-        }
-        return res.json({code: 1, message: message})
-    }
-})
-
-Router.get('/:_userId',CheckLogin, (req, res) => {
-    let {_userId} = req.params
-    if(!_userId){
-        return res.json({code: 1, message: 'Loi'})
-    }
-    Post.findById(_userId)
-    .then(post => {
-        // console.log(annou)
-        // res.render('notification_list',{ layout: '../views/layouts/notification_layout', announ: announ})
-        if(post)
-        {
-            res.render('GuestHome',{ layout: '../views/layouts/layout', post: post, auth:req.auth})
-        }
-        
-    })
-})
 
 Router.delete('/:id', CheckLogin, (req, res) => {
     let {id} = req.params
@@ -176,5 +127,189 @@ Router.put('/:id', CheckLogin, (req, res) => {
                 return ress.json({code: 3, message: e.message})
         })
 })
+
+
+
+Router.get('/:id',(req,res) => {
+    let {id} = req.params
+    let post_user = undefined
+    let agg_comment = [
+      [
+        {
+          '$lookup': {
+            'from': 'accounts', 
+            'localField': '_userId', 
+            'foreignField': '_id', 
+            'as': 'user'
+          }
+        }, {
+          '$unwind': {
+            'path': '$user'
+          }
+        }, {
+          '$project': {
+            'user.password': 0
+          }
+        }
+      ]
+    ]
+
+    let agg_annou = [
+        {
+            '$sort': {
+                'created_at': -1
+            }
+        } 
+    ]
+
+    let agg = [
+        {
+            '$sort': {
+              'created_at': -1
+            }
+        }, {
+          '$lookup': {
+            'from': 'accounts', 
+            'localField': '_userId', 
+            'foreignField': '_id', 
+            'as': 'user'
+          }
+        }, {
+          '$unwind': {
+            'path': '$user'
+          }
+        }, {
+          '$project': {
+            'user.createdAt': 0, 
+            'user.updatedAt': 0, 
+            'user.password': 0, 
+            'user.__v': 0
+          }
+        }
+      ]
+
+      
+        
+        Annoucement.aggregate(agg_annou)
+        .then(announ => {
+            Comments.aggregate(agg_comment)
+                .then(cmt => {
+                    Post.aggregate(agg)
+                    .then(post => {
+                      if(post.$lookup._userId === id )
+                      { 
+                        res.json({
+                          code: 0,
+                          message: 'Đọc danh sách sản phẩm thành công',
+                          data: post,
+                        })
+                      }else
+                      { 
+                        res.json({
+                          code: 0,
+                          message: 'That bai',
+                          data: post.$lookup._userId,
+                      })
+                      }
+                        
+                      
+                        
+                                //res.render('userHome', {announ: announ, auth:req.auth, post:post, cmt:cmt})
+                                
+                            });
+                        })    
+                    })
+                    
+              
+                    
+                    //res.render('index', {announ: announ, auth:req.auth, post:post, cmt:cmt})
+})
+
+
+
+
+
+/*Router.get('/:id',(req,res) => {
+    let {id} = req.params
+    let agg_comment = [
+      [
+        {
+          '$lookup': {
+            'from': 'accounts', 
+            'localField': '_userId', 
+            'foreignField': '_id', 
+            'as': 'user'
+          }
+        }, {
+          '$unwind': {
+            'path': '$user'
+          }
+        }, {
+          '$project': {
+            'user.password': 0
+          }
+        }
+      ]
+    ]
+
+    let agg_annou = [
+        {
+            '$sort': {
+                'created_at': -1
+            }
+        } 
+    ]
+
+    let agg = [
+        {
+            '$sort': {
+              'created_at': -1
+            }
+        }, {
+          '$lookup': {
+            'from': 'accounts', 
+            'localField': '_userId', 
+            'foreignField': '_id', 
+            'as': 'user'
+          }
+        }, {
+          '$unwind': {
+            'path': '$user'
+          }
+        }, {
+          '$project': {
+            'user.createdAt': 0, 
+            'user.updatedAt': 0, 
+            'user.password': 0, 
+            'user.__v': 0
+          }
+        }
+      ]
+      Account.findById(id).exec()
+      .then(acc => {
+        Annoucement.aggregate(agg_annou)
+        .then(announ => {
+            Annoucement.find()
+                .then(announ1 =>{
+                    Post.findOne({ id})
+                        .then(post1 =>{
+                            Post.aggregate(agg)
+                                .then(post => {
+                        
+                            Comments.aggregate(agg_comment)
+                            .then(cmt => {
+                               
+                                    res.render('userHome', {announ: announ, auth:req.auth, post:post, cmt:cmt})
+                                    /*res.json({
+                                        code: 0,
+                                        message: 'Đọc danh sách sản phẩm thành công',
+                                        data: post
+                                    })
+
+          })
+        })
+    
+   
+})})})})})*/
 
 module.exports = Router
