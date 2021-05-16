@@ -4,20 +4,21 @@
 <nav id="sidebar" class="sidebar-wrapper">
     <div class="sidebar-content">
         <div class="sidebar-brand">
-            <a class="h5" href="#">THÔNG BÁO</a>
+            <a style="padding-top:10px;" class="h5" href="/">
+                <i class="fas fa-house-user" style="padding-right: 10px;"></i>TRANG CHỦ</a>
             <div id="close-sidebar">
                 <i class="fas fa-bars"></i>
             </div>
         </div>
         <div class="sidebar-header">
             <div class="user-pic">
-                <img class="img-responsive img-rounded"
-                    src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg"
+                <img class="img-responsive img-rounded rounded-circle"
+                    src="https://randomuser.me/api/portraits/women/85.jpg" 
                     alt="User picture">
             </div>
             <div class="user-info">
                 <span class="user-name">
-                    <strong><a href="/"> <%- auth.name %>  </a></strong>
+                    <strong><a href="/home"> <%- auth.name %>  </a></strong>
                     <a href="/account/edit-info"> <i style="cursor: pointer; padding-left: 5px; color:#FACC2E;"class="far fa-edit"></i></a> 
                 </span>
                 <span class="user-role"><%- auth.role %></span>
@@ -194,7 +195,7 @@
         </a>
     </div> -->
 </nav>
-
+<script src="../../public/javascripts/main.js"></script>
 <script>
     function setCookie(cname, cvalue, exdays) {
     var d = new Date();

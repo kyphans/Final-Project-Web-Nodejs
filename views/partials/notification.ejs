@@ -2,10 +2,11 @@
     <div class="list-group-item bg-danger text-center text-white">Thông báo mới</li>
 </ul>
 
+
 <div style="overflow-y:scroll;height: 400px;">
     <% announ.forEach((element, index) => { %> 
         <%- 
-        `<div class="callout callout-info">
+        `<div class="callout callout-info" style="height:90px;overflow-y: auto;overflow-color: white;">
             <i>${element.created_at.toLocaleString()}</i>
             <br>
             <h5><a style="cursor: pointer;" href="/announ/${element._id}"> ${element.title} </a></h5>

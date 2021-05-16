@@ -11,6 +11,8 @@ const loginValidator = require('./validators/loginValidator')
 const CheckLogin = require('../auth/CheckLogin')
 const CookieParser = require('cookie-parser')
 const fs = require('fs')
+const PostDetail = require('../models/content/post/post.model')
+const Comments = require('../models/content/comment/comment.model')
 const multer= require('multer')
 const fileUpload = require('express-fileupload');
 const _ = require('lodash');
@@ -128,8 +130,8 @@ Router.post('/login', loginValidator, (req, res) => {
 Router.post('/register', registerValidator, (req, res) => {
     let result = validationResult(req)
     if (result.errors.length === 0) {
-
-        let {type, role, department_id, username, password,email, name, faculty_id, class_name, profile_picture, categories} = req.body
+        //var link_image = "../users-list/admin@gmail.com/21635.jpg"
+        let {type, role, department_id, username, password,email, name, faculty_id, class_name, profile_picture, categories, link_image} = req.body
         Account.findOne({email: email})
         .then(acc => {
             if (acc) {
@@ -148,11 +150,13 @@ Router.post('/register', registerValidator, (req, res) => {
                 name: name,
                 faculty_id: faculty_id,
                 class_name: class_name,
-                categories: categories
+                categories: categories,
+                link_image : link_image
             })
             user.save();
+            
             const {root} = req.vars
-            const userDir = `${root}/users-list/${user.email}`
+            const userDir = `${root}/public/users-list/${user.email}`
             fs.mkdir(userDir, ()=>{
                 return res.json({code: 0, message: 'Đăng ký tài khoản thành công', data: user})
             })
@@ -262,8 +266,9 @@ Router.post('/edit-info', async (req, res) => {
             //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
             let avatar = req.files.filename;
             let email = req.body.email
-                avatar.mv(`./users-list/${email}/` + avatar.name);
-                console.log(email);
+                avatar.mv(`./public/users-list/${email}/` + avatar.name);
+                var link = `./public/users-list/${email}/` + avatar.name
+                console.log(link);
             
             return res.json({
                 status: true,
@@ -272,7 +277,8 @@ Router.post('/edit-info', async (req, res) => {
                     
                     name: avatar.name,
                     mimetype: avatar.mimetype,
-                    size: avatar.size
+                    size: avatar.size,
+                    link : link
                 }
             });
         }
@@ -291,6 +297,11 @@ Router.get('/edit-info',CheckLogin,(req,res) => {
     })
    
 })
+
+
+
+ 
+
 
 
 module.exports = Router

@@ -53,7 +53,9 @@ $(document).ready(function () {
             },
             success: (data) => {
                $(this).closest("div.fb-cards-designs").remove()
+          
                $("div.alert-success").toggle()
+              
                setTimeout(function(){ $("div.alert-success").toggle() },3000);
             }
         });
@@ -152,9 +154,11 @@ function postStatus(){
             `
 
             $("div.container-post").prepend(post)
+            location.reload();
         }
+        
     })
-
+    
 }
 
 function enterToPost() {
@@ -165,6 +169,7 @@ function enterToPost() {
             }
         });
         $(this).find('input[type=submit]').hide();
+        
     });
 };
 

@@ -31,6 +31,7 @@ app.use(expressLayouts);
 app.set('layout','./layouts/layout')
 
 
+
 app.use((req,res,next) => {
     req.vars = {root: __dirname}
     next()
@@ -110,6 +111,16 @@ app.get('/',CheckLogin,(req,res) => {
     })
    
 })
+
+
+
+
+
+
+
+
+
+
 
 app.get('/login',(req,res) => {
     res.render('login',{ layout: './layouts/layout_login'})
