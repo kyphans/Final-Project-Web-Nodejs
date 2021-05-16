@@ -1,10 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <%- include('../partials/head.ejs') %>
+<meta
+    name="google-signin-client_id"
+    content="<%= process.env.GOOGLE_CLIENT_ID %>"
+  />
 <link href="stylesheets/login_style.css" rel="stylesheet" type="text/css">
     <body>
       <%- body %>
       <%- include('../partials/footer.ejs') %>
         <%- include('../partials/javascript.ejs') %>
     </body>
+    <script src="https://apis.google.com/js/api:client.js"></script>
+  <script>
+    var googleUser = {};
+    var client_id = document.querySelector(
+      'meta[name="google-signin-client_id"]'
+    ).content;
+    function init() {
+      gapi.load("auth2", function () {
+        // Retrieve the singleton for the GoogleAuth library and set up the client.
+        auth2 = gapi.auth2.init({
+          client_id,
+          cookiepolicy: "single_host_origin",
+          // Request scopes in addition to 'profile' and 'email'
+          //scope: 'additional_scope'
+        });
+        attachSignin(document.getElementById("g-signin"));
+      });
+    };
+    function attachSignin(element) {
+      console.log(element.id);
+      auth2.attachClickHandler(
+        element,
+        {},
+        function (googleUser) {
+          var id_token = googleUser.getAuthResponse().id_token;
+          const data = {
+            token: id_token,
+          };
+          fetch("/account/oauth/google/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          })
+            .then(res => res.json())
+            .then((data) => {
+              setCookie('token', data.token, 0)
+              setCookie('email', data.email, 0)
+              setCookie('name', data.name, 0)
+              setCookie('token', data.token, 1)
+              setCookie('email', data.email, 1)
+              setCookie('name', data.name, 1)
+              window.location.href = '/';
+            })
+            .catch(console.error);
+        },
+        function (error) {
+          console.error(error);
+        }
+      );
+    }
+    init();
+  </script>
 </html>

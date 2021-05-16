@@ -18,6 +18,11 @@ const multer= require('multer')
 const fileUpload = require('express-fileupload');
 const _ = require('lodash');
 const morgan = require('morgan');
+const { OAuth2Client } = require("google-auth-library");
+require("dotenv").config();
+const { GOOGLE_CLIENT_ID, JWT_SECRET } = process.env;
+const client = new OAuth2Client(GOOGLE_CLIENT_ID);
+
 
 
 Router.use(CookieParser())
@@ -94,7 +99,6 @@ Router.post('/login', loginValidator, (req, res) => {
             if (!passwordMatch) {
                 return res.status(401).json({code: 3, message: 'Đăng nhập thất bại, mật khẩu không chính xác'})
             }
-            const {JWT_SECRET} = process.env
             jwt.sign({
                 email: account.email,
                 name: account.name
@@ -125,6 +129,62 @@ Router.post('/login', loginValidator, (req, res) => {
         return res.json({code: 1, message: message})
     }
 })
+
+Router.post("/oauth/google", async (req, res) => {
+  const { token } = req.body;
+  let ticket;
+  try {
+    ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: GOOGLE_CLIENT_ID,
+    });
+  } catch (err) {
+    console.error(err);
+  }
+
+  const payload = ticket.getPayload();
+
+  const { name, picture, email } = payload;
+
+  Account.findOne({ email })
+    .then((acc) => {
+      if (!acc) {
+        let user = new Account({
+          name,
+          profile_picture: picture,
+          email,
+        });
+        return user.save();
+      }
+    })
+    .then(() => {
+      jwt.sign(
+        {
+          email,
+          name,
+        },
+        JWT_SECRET,
+        {
+          expiresIn: "1h",
+        },
+        (err, token) => {
+          if (err) throw err;
+          return res.json({
+            code: 0,
+            message: "Đăng nhập thành công",
+            email,
+            name,
+            token,
+          });
+        }
+      );
+    })
+    .catch((e) => {
+      return res
+        .status(401)
+        .json({ code: 2, message: "Đăng nhập thất bại: " + e.message });
+    });
+});
 
 Router.post('/register', registerValidator, (req, res) => {
     let result = validationResult(req)

@@ -25,7 +25,8 @@ const Comments = require('./models/content/comment/comment.model')
 
 require('dotenv').config()
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 3030
+app.use(morgan('short'))
 app.set("view engine", "ejs")
 app.use(expressLayouts);
 app.set('layout','./layouts/layout')
@@ -128,7 +129,9 @@ app.use('/department',CheckLogin, DepartmentRouter)
 app.all('*', (req, res) => res.json({code:101, message: 'Đường dẫn hoặc phương thức không được hỗ trợ'}))
 
 // app.listen(PORT, () => console.log("listening on port: http://localhost:" + PORT))
-mongoose.connect('mongodb://localhost:27017/Social', {
+
+const DATABASE_URL = process.env.DATABASE_URL || 'mongodb://localhost:27017//Social'
+mongoose.connect(`${DATABASE_URL}`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true
