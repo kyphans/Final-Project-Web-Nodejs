@@ -48,7 +48,6 @@
           })
             .then(res => res.json())
             .then((data) => {
-              console.log(data)
               setCookie('token', data.token, 0)
               setCookie('email', data.email, 0)
               setCookie('name', data.name, 0)
