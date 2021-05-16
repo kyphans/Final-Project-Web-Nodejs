@@ -31,6 +31,7 @@ app.use(expressLayouts);
 app.set('layout','./layouts/layout')
 
 
+
 app.use((req,res,next) => {
     req.vars = {root: __dirname}
     next()
@@ -110,6 +111,77 @@ app.get('/',CheckLogin,(req,res) => {
     })
    
 })
+
+
+app.get('/home',CheckLogin,(req,res) => {
+  let agg_comment = [
+    [
+      {
+        '$lookup': {
+          'from': 'accounts', 
+          'localField': '_userId', 
+          'foreignField': '_id', 
+          'as': 'user'
+        }
+      }, {
+        '$unwind': {
+          'path': '$user'
+        }
+      }, {
+        '$project': {
+          'user.password': 0
+        }
+      }
+    ]
+  ]
+
+  let agg_annou = [
+      {
+          '$sort': {
+              'created_at': -1
+          }
+      } 
+  ]
+
+  let agg = [
+      {
+          '$sort': {
+            'created_at': -1
+          }
+      }, {
+        '$lookup': {
+          'from': 'accounts', 
+          'localField': '_userId', 
+          'foreignField': '_id', 
+          'as': 'user'
+        }
+      }, {
+        '$unwind': {
+          'path': '$user'
+        }
+      }, {
+        '$project': {
+          'user.createdAt': 0, 
+          'user.updatedAt': 0, 
+          'user.password': 0, 
+          'user.__v': 0
+        }
+      }
+    ]
+  Annoucement.aggregate(agg_annou)
+  .then(announ => {
+      PostDetail.aggregate(agg)
+      .then(post => {
+        Comments.aggregate(agg_comment)
+        .then(cmt => {
+          res.render('userHome', {announ: announ, auth:req.auth, post:post, cmt:cmt})
+        })
+      })
+  })
+ 
+})
+
+
 
 app.get('/login',(req,res) => {
     res.render('login',{ layout: './layouts/layout_login'})

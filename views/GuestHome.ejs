@@ -1,22 +1,17 @@
+<form action="/post/home" class="my-3" method="POST" >
+    <div class="form-group">
+        <textarea class="form-control" id="content" rows="3" placeholder="Bạn đang suy nghĩ gì?"
+            name="content"></textarea>
+        <input id="id-user" name="user_id" value="<%- auth.id %>" hidden>
+    </div>
+    <button type="submit" class="btn btn-primary ml-auto">Post</button>
+</form>
 
-<div class="form-group">
-    <textarea class="form-control" id="content" rows="3" placeholder="Bạn đang suy nghĩ gì?"
-        name="content"></textarea>
-    <input id="id-user" name="user_id" value="<%- auth.id %>" hidden>
-</div>
-<button type="submit" class="btn btn-primary ml-auto" onclick="postStatus()">Post</button>
-<div class="container-post container mt-4">
-
-<% post.forEach((element, index)=> { %>
+<% post.forEach((element, index)=> { 
+   
+    %>
     <%- ` <div class="fb-cards-designs">
-        <div class="postId" hidden>${element._id}</div>
-        <div class="fb-clone-card position-relative">
-            <div class="panel-options position-absolute" style="z-index: 99; top:30px; right:5px; display: none;" >
-                <ul class="list-group">
-                <li class="list-group-item">Chỉnh sửa</li>
-                <li class="list-group-item"><a class="deletePost" href="">Xoá</a></li>
-                </ul>
-             </div>
+        <div class="fb-clone-card">
             <div class="fb-card-main-content">
                 <div class="fb-card-header">
                     <div class="user-post-info">
@@ -31,11 +26,7 @@
                         </div>
                     </div>
                     <div class="post-action">
-                    ` %>
-                        <% if (element.user.name == auth.name){ %>
-                            <i class="fas fa-ellipsis-h"></i>
-                        <% } %>
-                    <%- `
+                        <i class="fas fa-ellipsis-h"></i>
                     </div>
                 </div>
 
@@ -101,7 +92,7 @@
                                             class="img-responsive" />
                                     </div>
                                     <div class="user-information">
-                                        <a href="/account/${comment._userId}">
+                                        <a href="/post/${comment._userId}">
                                             ${comment.user.name} 
                                            
                                         </a>
@@ -121,10 +112,8 @@
     </div>
     <div class="created-by" style="text-align:center;margin-bottom:16px;"></div>
     `%>
-<% }); %>
-<<<<<<< Updated upstream
-</div>
-=======
+<% 
+    }); %>
 
 
 <script>
@@ -169,4 +158,3 @@
 
 
 </script>
->>>>>>> Stashed changes

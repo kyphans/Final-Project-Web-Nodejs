@@ -51,29 +51,56 @@ Router.post('/', (req, res) => {
     }
 })
 
-Router.get('/:id',(req, res) => {
-    let {id} = req.params
-    if(!id)
-    {
-        return res.json({code: 1, message: 'Khong co thong tin'})
+
+Router.post('/home', (req, res) => {
+    let result = validationResult(req)
+    if (result.errors.length === 0) {
+        
+        const {type, content, user_id, attachments} = req.body
+        let like_count = 0
+        let comment_count = 0
+        let created_at = new Date()
+        let modified_at = new Date()
+        let _userId = user_id
+        let post = new Post({
+            type, like_count, comment_count, created_at, modified_at, _userId, attachments,content
+        })
+        post.save()
+        .then(() => {
+            // return res.json({code: 0, message: 'Thêm post thành công',
+            //     data: post})
+            res.redirect("/home")
+        })
+        .catch(e => {
+            return res.json({code: 2, message: e.message})
+        })
     }
-    Post.findById(id)
-    .then(p =>
+    else {
+        let messages = result.mapped()
+        let message = ''
+        for (m in messages) {
+            message = messages[m].msg
+            break
+        }
+        return res.json({code: 1, message: message})
+    }
+})
+
+Router.get('/:_userId',CheckLogin, (req, res) => {
+    let {_userId} = req.params
+    if(!_userId){
+        return res.json({code: 1, message: 'Loi'})
+    }
+    Post.findById(_userId)
+    .then(post => {
+        // console.log(annou)
+        // res.render('notification_list',{ layout: '../views/layouts/notification_layout', announ: announ})
+        if(post)
         {
-            if(p)
-            {
-                return res.json({code: 0, message: 'Da tim thay san pham', data: p})
-            }else
-                return res.json({code: 2, message: 'Khong tim thay san pham'})
-        })
-    .catch(e =>
-        {
-            if(e.message.includes('Cast to ObjectId failed'))
-            {
-                return ress.json({code: 3, message: 'Day khong phai la mot id hop le'})
-            }
-                return ress.json({code: 3, message: e.message})
-        })
+            res.render('GuestHome',{ layout: '../views/layouts/layout', post: post, auth:req.auth})
+        }
+        
+    })
 })
 
 Router.delete('/:id', CheckLogin, (req, res) => {

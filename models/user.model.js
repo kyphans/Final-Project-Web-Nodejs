@@ -21,6 +21,7 @@ const userSchema = new Schema(
     class_name: String,
     profile_picture: String,
     categories: Array,
+    link_image: String,
   },
   { timestamps: true }
 );
