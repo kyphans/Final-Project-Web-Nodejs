@@ -469,7 +469,7 @@ let get_name = $("#edit-name").val()
 let get_deparment = $("#edit-department_id option").filter(':selected').text()
 let get_deparment_id = $("#edit-department_id option").filter(':selected').val()
 let get_username = 	$("#edit-username").val()
-let get_role = "Admin da sua";
+let get_role = "Admin";
 let get_email = $("#edit-email").val()
 let url = "/account/"+get_id
 // console.log(url)
@@ -511,6 +511,34 @@ $.ajax({
     }
 });
 }
+
+function editAccountNoAjax() {
+    let get_tr_id = $("#tr_id").text()
+    let get_id = $("#_id").text()
+    let get_name = $("#edit-name").val()
+    let get_deparment = $("#edit-department_id option").filter(':selected').text()
+    let get_deparment_id = $("#edit-department_id option").filter(':selected').val()
+    let get_username = 	$("#edit-username").val()
+    let get_role = "Admin";
+    let get_email = $("#edit-email").val()
+    let url = "/account/"+get_id
+    // console.log(url)
+    $.ajax({
+        type: "PUT",
+        url: url,
+        data: {
+            "name":get_name,
+            "_departmentId":get_deparment_id,
+            "username":get_username,
+            "role":get_role,
+            "email":get_email
+        },
+        success: (data)=>{
+            location.reload();
+        }
+    });
+    }
+
 function deleteUser(__id) {
 let get_id = $("#_id").text()
 

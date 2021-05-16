@@ -290,9 +290,10 @@ Router.post('/edit-info', async (req, res) => {
 Router.get('/edit-info',CheckLogin,(req,res) => {
     Annoucement.find()
     .then(announ => {
-        // console.log(annou)
-        // res.render('notification_list',{ layout: '../views/layouts/notification_layout', announ: announ})
-        res.render('edit-info', {announ: announ, auth:req.auth})
+        Department.find()
+        .then(department => {
+            res.render('edit-info', {announ: announ, auth:req.auth, department:department})
+        })
     })
    
 })

@@ -16,10 +16,13 @@ Router.get('/',CheckLogin,(req,res) => {
             }
         }  
     ]
-    Annoucement.aggregate(agg)
-    .then(announ => {
-        // console.log(annou)
-        res.render('notification_list',{ layout: '../views/layouts/notification_layout', announ: announ, auth:req.auth})
+    Department.find()
+    .then(department => {
+        Annoucement.aggregate(agg)
+        .then(announ => {
+            // console.log(annou)
+            res.render('notification_list',{ layout: '../views/layouts/notification_layout', announ: announ, auth:req.auth, department:department})
+        })
     })
 })
 
