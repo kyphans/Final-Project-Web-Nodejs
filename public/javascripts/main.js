@@ -1,5 +1,3 @@
-
-
 jQuery(function ($) {
 
     $(".sidebar-dropdown > a").click(function () {
@@ -154,7 +152,7 @@ function postStatus(){
             `
 
             $("div.container-post").prepend(post)
-            location.reload();
+            // 
         }
         
     })
@@ -168,7 +166,7 @@ function enterToPost() {
                 this.form.submit();
             }
         });
-        $(this).find('input[type=submit]').hide();
+        // $(this).find('input[type=submit]').hide();
         
     });
 };
@@ -275,7 +273,7 @@ function addDepartment() {
                 </tr>`
             )
             $("#addDepartmentModal").modal('toggle')
-            location.reload();
+            
         }
     });
 }
@@ -304,7 +302,6 @@ function editDepartment() {
             let json = data.data
             $("td." + get_id).closest("tr").find("td.name").text(get_name)
             $("#editDepartmentModal").modal('toggle')
-            location.reload();
         }
     });
 }
@@ -339,7 +336,7 @@ function deleteDepartment(__id) {
                 </div>`
             )
             $("#deleteDepartmentModal").modal('toggle')
-            location.reload();
+            
 
         }
     });
@@ -461,7 +458,7 @@ $.ajax({
             </tr>` 
         )
         $("#addUserModal").modal('toggle')
-        location.reload();
+        // 
     }
 });
 }
@@ -510,7 +507,7 @@ $.ajax({
             </tr>` 
         )
         $("#editUserModal").modal('toggle')
-        location.reload();
+        
     }
 });
 }
@@ -546,7 +543,7 @@ $.ajax({
                         </div>` 
         )
         $("#deleteUserModal").modal('toggle')
-        location.reload();
+        
             
     }
 });

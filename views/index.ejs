@@ -1,8 +1,6 @@
 <form class="my-3">
 <div class="form-group">
-   
-        <textarea class="form-control" name="content" id="content" rows="2" placeholder="Bạn đang suy nghĩ gì?">
-        </textarea>
+    <textarea class="form-control" name="content" id="content" rows="2" placeholder="Bạn đang suy nghĩ gì?"></textarea>
     <input id="id-user" name="user_id" value="<%- auth.id %>" hidden>
     </div>
 </form>
@@ -26,7 +24,7 @@
                             <img src="https://randomuser.me/api/portraits/men/94.jpg" class="img-responsive" />
                         </div>
                         <div class="user-information">
-                            <a href="/post/${element.user._id}">
+                            <a href="/account/${element.user._id}">
                                 <p>${element.user.name}</p>
                             </a>
                             <small>${element.created_at.toLocaleString()}</small>
@@ -124,7 +122,6 @@
     <div class="created-by" style="text-align:center;margin-bottom:16px;"></div>
     `%>
 <% }); %>
-<<<<<<< Updated upstream
 </div>
 
 

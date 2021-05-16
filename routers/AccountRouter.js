@@ -13,6 +13,7 @@ const CookieParser = require('cookie-parser')
 const fs = require('fs')
 const PostDetail = require('../models/content/post/post.model')
 const Comments = require('../models/content/comment/comment.model')
+const mongoose = require("mongoose");
 const multer= require('multer')
 const fileUpload = require('express-fileupload');
 const _ = require('lodash');
@@ -68,14 +69,12 @@ Router.get('/',CheckLogin, (req, res) => {
                 // console.log(department)
                 res.render('users',{ layout: './layouts/layout', announ: announ, department: department, users:users, auth:req.auth})
             })
-            // .then(edit => {
-            //     res.render('edit-info',{ layout: './layouts/layout', edit: edit, announ: announ, users:users, auth:req.auth})
-            // })
         })
     })
     
     
 })
+
 
 Router.post('/login', loginValidator, (req, res) => {
     let result = validationResult(req)
@@ -296,6 +295,80 @@ Router.get('/edit-info',CheckLogin,(req,res) => {
         res.render('edit-info', {announ: announ, auth:req.auth})
     })
    
+})
+
+Router.get('/:id',CheckLogin, (req, res) => {
+    let {id} = req.params
+
+    let agg_comment = [
+        [
+          {
+            '$lookup': {
+              'from': 'accounts', 
+              'localField': '_userId', 
+              'foreignField': '_id', 
+              'as': 'user'
+            }
+          }, {
+            '$unwind': {
+              'path': '$user'
+            }
+          }, {
+            '$project': {
+              'user.password': 0
+            }
+          }
+        ]
+      ]
+  
+    let agg_annou = [
+        {
+            '$sort': {
+                'created_at': -1
+            }
+        } 
+    ]
+  
+    let agg = [
+        {
+            '$match': {
+              '_userId': new mongoose.Types.ObjectId(id)
+            }
+        }
+        ,{
+            '$sort': {
+            'created_at': -1
+            }
+        }, {
+        '$lookup': {
+            'from': 'accounts', 
+            'localField': '_userId', 
+            'foreignField': '_id', 
+            'as': 'user'
+        }
+        }, {
+        '$unwind': {
+            'path': '$user'
+        }
+        }, {
+        '$project': {
+            'user.createdAt': 0, 
+            'user.updatedAt': 0, 
+            'user.password': 0, 
+            'user.__v': 0
+        }
+        }
+    ]
+    Annoucement.aggregate(agg_annou)
+    .then(announ => {
+        PostDetail.aggregate(agg)
+        .then(post => {
+        Comments.aggregate(agg_comment)
+        .then(cmt => {
+            res.render('index', {announ: announ, auth:req.auth, post:post, cmt:cmt})
+        })
+        })
+    })
 })
 
 

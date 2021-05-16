@@ -37,9 +37,9 @@ module.exports = (req, res, next) => {
 
     jwt.verify(token, JWT_SECRET, (err, data) => {
         if (err) {
-            return res.status(401)
-                .json({ code: 101, message: "Token khong hop le hoac da het han" })
-            // return res.redirect('/login');
+            // return res.status(401)
+            //     .json({ code: 101, message: "Token khong hop le hoac da het han" })
+            return res.redirect('/login');
         } else {
             Account.findOne({
                 email: data.email

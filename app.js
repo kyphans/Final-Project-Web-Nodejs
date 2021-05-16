@@ -113,15 +113,6 @@ app.get('/',CheckLogin,(req,res) => {
 })
 
 
-
-
-
-
-
-
-
-
-
 app.get('/login',(req,res) => {
     res.render('login',{ layout: './layouts/layout_login'})
 })
