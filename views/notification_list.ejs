@@ -16,7 +16,7 @@
       <li class="page-item"><a class="page-link" href="#">Next</a></li>
     </ul>
   </nav> -->
-  <select class="custom-select mb-3">
+  <select class="department custom-select mb-3">
     <option> -- Xem thông báo theo khoa -- </option>
     <% department.forEach((element, index) => { %> 
       <%- 
@@ -26,6 +26,21 @@
       %>
     <% });  %> 
   </select>
+
+
+  <select class="categories custom-select mb-3">
+    <option> -- Xem thông báo theo thể loại -- </option>
+    <% categories.forEach((element, index) => { %> 
+      <%- 
+      `
+      <option value="${element._id}">${element.name}</option>
+      `
+      %>
+    <% });  %> 
+  </select>
+
+ 
+
 <div class="list-group-item bg-primary text-center text-white my-2"><a class="text-white" href="/announ/create">Tạo thông báo mới</a></div>
 <%- include('./partials/notification.ejs') %> 
 

@@ -20,8 +20,11 @@ Router.get('/',CheckLogin,(req,res) => {
     .then(department => {
         Annoucement.aggregate(agg)
         .then(announ => {
+            Categories.find()
+            .then(categories => {
             // console.log(annou)
-            res.render('notification_list',{ layout: '../views/layouts/notification_layout', announ: announ, auth:req.auth, department:department})
+                res.render('notification_list',{ layout: '../views/layouts/notification_layout', announ: announ, auth:req.auth, department:department, categories:categories})
+            })
         })
     })
 })

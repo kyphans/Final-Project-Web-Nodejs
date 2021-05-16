@@ -130,7 +130,8 @@ app.all('*', (req, res) => res.json({code:101, message: 'Đường dẫn hoặc 
 
 // app.listen(PORT, () => console.log("listening on port: http://localhost:" + PORT))
 
-const DATABASE_URL = process.env.DATABASE_URL || 'mongodb://localhost:27017//Social'
+const DATABASE_URL = process.env.DATABASE_URL || 'mongodb://localhost:27017/Social'
+console.log(DATABASE_URL)
 mongoose.connect(`${DATABASE_URL}`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
